@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fixorium Pay - FixerCoin Wallet</title>
+<script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
+<style>
+  body {
+    font-family: Arial, sans-serif; 
+    margin: 30px; 
+    background: #f5f7fa; 
+    color: #333;
+  }
+  h1 { color: #4a90e2; }
+  button {
+    padding: 10px 20px; 
+    font-size: 16px; 
+    margin-top: 10px; 
+    cursor: pointer; 
+    background-color: #4a90e2; 
+    color: white; 
+    border: none; 
+    border-radius: 4px;
+  }
+  button:hover {
+    background-color: #357abd;
+  }
+  .container {
+    max-width: 500px;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  label {
+    display: block; margin: 12px 0 6px;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 10px; 
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  #walletDetails {
+    margin-top: 15px;
+    background: #e8f0fe;
+    padding: 15px;
+    border-radius: 6px;
+    word-break: break-all;
+  }
+  #fixerBalance {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Fixorium Pay Wallet</h1>
+  <p>Create a new Fixorium Pay wallet for FixerCoin token.</p>
+  
+  <button id="createWalletBtn">Create New Wallet</button>
+  
+  <div id="walletDetails" style="display:none;">
+    <h3>Your Fixorium Pay Wallet</h3>
+    <p><strong>Address:</strong> <span id="walletAddress"></span></p>
+    <p><strong>Private Key:</strong> <span id="walletPrivateKey" style="user-select: all;"></span></p>
+    
+    <div id="fixerBalance">Balance: ...</div>
+    
+    <h4>Send FixerCoin</h4>
+    <label for="recipient">Recipient Address</label>
+    <input type="text" id="recipient" placeholder="0x..." />
+    
+    <label for="amount">Amount to Send</label>
+    <input type="number" id="amount" placeholder="Token Amount" step="any" min="0" />
+    
+    <button id="sendFixerBtn">Send FixerCoin</button>
+    <p id="transactionStatus" style="margin-top:10px;"></p>
+  </div>
+</div>
+
+<script>
+  // Load Ethers from global
+  const ethers = window.ethers;
+
+  // FixerCoin token contract info (replace with your token's actual deployed address)
+  const FIXERCOIN_ADDRESS = "0xYourFixerCoinTokenAddressHere"; // <-- update this
+  // Standard minimal ERC20 ABI to interact with token balance and transfer functions
+  const ERC20_ABI = [
+      "function balanceOf(address owner) view returns (uint256)",
+      "function transfer(address to, uint amount) returns (bool)",
+      "function decimals() view returns (uint8)",
+      "event Transfer(address indexed from, address indexed to, uint amount)"
+  ];
+
+  let wallet;
+  let provider;
+  let fixerCoinContract;
+  let decimals = 18; // default, will fetch decimals dynamically
+
+  const createWalletBtn = document.getElementById('createWalletBtn');
+  const walletDetailsDiv = document.getElementById('walletDetails');
+  const walletAddressSpan = document.getElementById('walletAddress');
+  const walletPrivateKeySpan = document.getElementById('walletPrivateKey');
+  const fixerBalanceDiv = document.getElementById('fixerBalance');
+  const sendFixerBtn = document.getElementById('sendFixerBtn');
+  const recipientInput = document.getElementById('recipient');
+  const amountInput = document.getElementById('amount');
+  const transactionStatus = document.getElementById('transactionStatus');
+
+  createWalletBtn.addEventListener('click', async () => {
+    // Create a random new wallet
+    wallet = ethers.Wallet.createRandom();
+
+    // Connect to the Ethereum network via a public provider (Ethers default: homestead)
+    provider = ethers.getDefaultProvider(); // connects to Mainnet by default
+
+    // Connect wallet to the provider
+    wallet = wallet.connect(provider);
+
+    // Setup FixerCoin contract instance connected to the wallet
+    fixerCoinContract = new ethers.Contract(FIXERCOIN_ADDRESS, ERC20_ABI, wallet);
+
+    // Fetch decimals for FixerCoin
+    try {
+      decimals = await fixerCoinContract.decimals();
+    } catch (e) {
+      decimals = 18; // fallback
+    }
+
+    walletAddressSpan.textContent = wallet.address;
+    walletPrivateKeySpan.textContent = wallet.privateKey;
+
+    // Show wallet info section
+    walletDetailsDiv.style.display = 'block';
+    transactionStatus.textContent = '';
+    recipientInput.value = '';
+    amountInput.value = '';
+
+    // Fetch and show token balance
+    await updateFixerBalance();
+  });
+
+  async function updateFixerBalance() {
+    try {
+      const balance = await fixerCoinContract.balanceOf(wallet.address);
+      const formattedBalance = ethers.utils.formatUnits(balance, decimals);
+      fixerBalanceDiv.textContent = `FixerCoin Balance: ${formattedBalance}`;
+    } catch (e) {
+      fixerBalanceDiv.textContent = 'Could not retrieve FixerCoin balance.';
+      console.error(e);
+    }
+  }
+
+  sendFixerBtn.addEventListener('click', async () => {
+    const recipient = recipientInput.value.trim();
+    const amountStr = amountInput.value;
+
+    transactionStatus.style.color = 'black';
+    transactionStatus.textContent = '';
+
+    if (!ethers.utils.isAddress(recipient)) {
+      transactionStatus.style.color = 'red';
+      transactionStatus.textContent = 'Please enter a valid recipient address.';
+      return;
+    }
+    if (!amountStr || isNaN(amountStr) || Number(amountStr) <= 0) {
+      transactionStatus.style.color = 'red';
+      transactionStatus.textContent = 'Please enter a valid amount greater than zero.';
+      return;
+    }
+
+    try {
+      const amountParsed = ethers.utils.parseUnits(amountStr, decimals);
+
+      transactionStatus.textContent = 'Sending transaction... Please wait.';
+
+      // Send ERC20 token transfer transaction
+      const tx = await fixerCoinContract.transfer(recipient, amountParsed);
+      await tx.wait(); // wait to be mined
+
+      transactionStatus.style.color = 'green';
+      transactionStatus.textContent = `Transaction successful! Tx Hash: ${tx.hash}`;
+
+      // Update balance after sending
+      await updateFixerBalance();
+
+      // Clear inputs
+      recipientInput.value = '';
+      amountInput.value = '';
+
+    } catch (e) {
+      transactionStatus.style.color = 'red';
+      transactionStatus.textContent = `Transaction failed: ${e.message}`;
+      console.error(e);
+    }
+  });
+</script>
+
+</body>
+</html>
+
+
+
+
+
