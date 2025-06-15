@@ -6,7 +6,7 @@ body {
     padding: 20px;
 }
 
-.container {
+#app {
     max-width: 600px;
     margin: auto;
     background: white;
@@ -28,6 +28,7 @@ input {
 }
 
 button {
+    width: 100%;
     padding: 10px;
     background-color: #28a745;
     color: white;
