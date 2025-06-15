@@ -1,18 +1,27 @@
  // script.js
-document.getElementById('createAccountForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    // Logic to create a new account
-});
+let balanceUSD = 0;
+let balanceTokens = 0;
+let balancePKR = 0;
 
-document.getElementById('depositTokenBtn').addEventListener('click', function() {
-    // Logic to get deposit address using scanning
-});
+function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    // Authentication logic here
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('wallet').style.display = 'block';
+}
 
-document.getElementById('withdrawTokenBtn').addEventListener('click', function() {
-    // Logic to get withdraw address using scanning
-});
+function scanAddress() {
+    // Camera scanning logic here
+}
 
-// Function to show transaction history
-function showTransactionHistory() {
-    // Logic to fetch and display transaction history
+function sendToken() {
+    const address = document.getElementById('address').value;
+    const amount = document.getElementById('amount').value;
+    // Logic to send token to the address
+}
+
+function receiveToken() {
+    const address = document.getElementById('address').value;
+    // Logic to receive token from the address
 }
