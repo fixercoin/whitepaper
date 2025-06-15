@@ -1,32 +1,43 @@
- # Wallet Application
+ # Crypto Wallet Application
 
+## HTML Code
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet Application</title>
+    <title>Crypto Wallet</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="app">
-        <h1>Wallet Application</h1>
-        <div id="login">
+    <div class="container">
+        <h1>Crypto Wallet</h1>
+        <div id="login-form">
             <h2>Login</h2>
-            <input type="email" id="email" placeholder="Enter your Gmail" required>
-            <input type="password" id="password" placeholder="Enter your password" required>
-            <button onclick="login()">Login</button>
+            <form id="login" method="POST" action="login.php">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
         </div>
-        <div id="wallet" style="display:none;">
+        <div id="create-account-form">
+            <h2>Create Account</h2>
+            <form id="create-account" method="POST" action="create_account.php">
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+        <div id="wallet">
             <h2>Wallet Balance</h2>
-            <p>Balance in USD: <span id="balanceUSD">0</span></p>
-            <p>Balance in Tokens: <span id="balanceTokens">0</span></p>
-            <p>Balance in PKR: <span id="balancePKR">0</span></p>
-            <button onclick="scanAddress()">Scan Address</button>
-            <input type="text" id="address" placeholder="Enter address" required>
-            <input type="number" id="amount" placeholder="Amount to send" required>
-            <button onclick="sendToken()">Send Token</button>
-            <button onclick="receiveToken()">Receive Token</button>
+            <p id="balance">Balance: $0.00</p>
+            <button id="send-crypto">Send Crypto</button>
+            <button id="receive-crypto">Receive Crypto</button>
+        </div>
+        <div id="transaction-history">
+            <h2>Transaction History</h2>
+            <ul id="history-list"></ul>
         </div>
     </div>
     <script src="script.js"></script>
