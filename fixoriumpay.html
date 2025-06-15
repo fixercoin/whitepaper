@@ -1,207 +1,51 @@
-
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FIXORIUM PAY</title>
-<script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
-<style>
-  body {
-    font-family: Arial, sans-serif; 
-    margin: 30px; 
-    background: #f5f7fa; 
-    color: #333;
-  }
-  h1 { color: #4a90e2; }
-  button {
-    padding: 10px 20px; 
-    font-size: 16px; 
-    margin-top: 10px; 
-    cursor: pointer; 
-    background-color: #4a90e2; 
-    color: white; 
-    border: none; 
-    border-radius: 4px;
-  }
-  button:hover {
-    background-color: #357abd;
-  }
-  .container {
-    max-width: 500px;
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  label {
-    display: block; margin: 12px 0 6px;
-  }
-  input, textarea {
-    width: 100%;
-    padding: 10px; 
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  #walletDetails {
-    margin-top: 15px;
-    background: #e8f0fe;
-    padding: 15px;
-    border-radius: 6px;
-    word-break: break-all;
-  }
-  #fixerBalance {
-    font-weight: bold;
-    margin-top: 10px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixorium Pay Wallet</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #wallet { margin: 20px; }
+        #qrCode { margin-top: 20px; }
+    </style>
 </head>
 <body>
+    <div id="wallet">
+        <h1>Fixorium Pay Wallet</h1>
+        <input type="text" id="tokenAddress" placeholder="Enter Token Address" />
+        <button id="generateQr">Generate QR Code</button>
+        <div id="qrCode"></div>
+        <h2>Check Balance</h2>
+        <button id="checkBalance">Check Balance</button>
+        <p id="balance"></p>
+        <h2>Transfer Tokens</h2>
+        <input type="text" id="recipientAddress" placeholder="Recipient Address" />
+        <input type="number" id="amount" placeholder="Amount" />
+        <button id="transferTokens">Transfer Tokens</button>
+    </div>
 
-<div class="container">
-  <h1>0.00  </h1>
-  <p>FIXERCOIN </p>
-  
-  <button id="createWalletBtn">CREATE ACCOUNT</button>
-  
-  <div id="walletDetails" style="display:none;">
-    <h3>YOUR FIXORIUM PAY ACCOUNT</h3>
-    <p><strong>ADDRESS:</strong> <span id="walletAddress"></span></p>
-    <p><strong>PRIVATE KEY:</strong> <span id="walletPrivateKey" style="user-select: all;"></span></p>
-    
-    <div id="fixerBalance">BALANCE: ...</div>
-    
-    <h4>SEND FIXERCOIN</h4>
-    <label for="recipient">RECIPIENT ADDRESS</label>
-    <input type="text" id="recipient" placeholder="0x..." />
-    
-    <label for="amount">AMOUNT TO SEND</label>
-    <input type="number" id="amount" placeholder="Token Amount" step="any" min="0" />
-    
-    <button id="sendFixerBtn">SEND FIXERCOIN</button>
-    <p id="transactionStatus" style="margin-top:10px;"></p>
-  </div>
-</div>
+    <script>
+        $(document).ready(function() {
+            $('#generateQr').click(function() {
+                var tokenAddress = $('#tokenAddress').val();
+                $('#qrCode').empty().qrcode(tokenAddress);
+            });
 
-<script>
-  // Load Ethers from global
-  const ethers = window.ethers;
+            $('#checkBalance').click(function() {
+                // Simulated balance check
+                $('#balance').text('Your balance is: 100 Tokens');
+            });
 
-  // FixerCoin token contract info (replace with your token's actual deployed address)
-  const FIXERCOIN_ADDRESS = "H4qKn8FMFha8jJuj8xMryMqRhH3h7GjLuxw7TVixpump"; // <-- update this
-  // Standard minimal ERC20 ABI to interact with token balance and transfer functions
-  const ERC20_ABI = [
-      "function balanceOf(address owner) view returns (uint256)",
-      "function transfer(address to, uint amount) returns (bool)",
-      "function decimals() view returns (uint8)",
-      "event Transfer(address indexed from, address indexed to, uint amount)"
-  ];
-
-  let wallet;
-  let provider;
-  let fixerCoinContract;
-  let decimals = 18; // default, will fetch decimals dynamically
-
-  const createWalletBtn = document.getElementById('createWalletBtn');
-  const walletDetailsDiv = document.getElementById('walletDetails');
-  const walletAddressSpan = document.getElementById('walletAddress');
-  const walletPrivateKeySpan = document.getElementById('walletPrivateKey');
-  const fixerBalanceDiv = document.getElementById('fixerBalance');
-  const sendFixerBtn = document.getElementById('sendFixerBtn');
-  const recipientInput = document.getElementById('recipient');
-  const amountInput = document.getElementById('amount');
-  const transactionStatus = document.getElementById('transactionStatus');
-
-  createWalletBtn.addEventListener('click', async () => {
-    // Create a random new wallet
-    wallet = ethers.Wallet.createRandom();
-
-    // Connect to the Ethereum network via a public provider (Ethers default: homestead)
-    provider = ethers.getDefaultProvider(); // connects to Mainnet by default
-
-    // Connect wallet to the provider
-    wallet = wallet.connect(provider);
-
-    // Setup FixerCoin contract instance connected to the wallet
-    fixerCoinContract = new ethers.Contract(FIXERCOIN_ADDRESS, ERC20_ABI, wallet);
-
-    // Fetch decimals for FixerCoin
-    try {
-      decimals = await fixerCoinContract.decimals();
-    } catch (e) {
-      decimals = 18; // fallback
-    }
-
-    walletAddressSpan.textContent = wallet.address;
-    walletPrivateKeySpan.textContent = wallet.privateKey;
-
-    // Show wallet info section
-    walletDetailsDiv.style.display = 'block';
-    transactionStatus.textContent = '';
-    recipientInput.value = '';
-    amountInput.value = '';
-
-    // Fetch and show token balance
-    await updateFixerBalance();
-  });
-
-  async function updateFixerBalance() {
-    try {
-      const balance = await fixerCoinContract.balanceOf(wallet.address);
-      const formattedBalance = ethers.utils.formatUnits(balance, decimals);
-      fixerBalanceDiv.textContent = `FixerCoin Balance: ${formattedBalance}`;
-    } catch (e) {
-      fixerBalanceDiv.textContent = 'Could not retrieve FixerCoin balance.';
-      console.error(e);
-    }
-  }
-
-  sendFixerBtn.addEventListener('click', async () => {
-    const recipient = recipientInput.value.trim();
-    const amountStr = amountInput.value;
-
-    transactionStatus.style.color = 'black';
-    transactionStatus.textContent = '';
-
-    if (!ethers.utils.isAddress(recipient)) {
-      transactionStatus.style.color = 'red';
-      transactionStatus.textContent = 'Please enter a valid recipient address.';
-      return;
-    }
-    if (!amountStr || isNaN(amountStr) || Number(amountStr) <= 0) {
-      transactionStatus.style.color = 'red';
-      transactionStatus.textContent = 'Please enter a valid amount greater than zero.';
-      return;
-    }
-
-    try {
-      const amountParsed = ethers.utils.parseUnits(amountStr, decimals);
-
-      transactionStatus.textContent = 'Sending transaction... Please wait.';
-
-      // Send ERC20 token transfer transaction
-      const tx = await fixerCoinContract.transfer(recipient, amountParsed);
-      await tx.wait(); // wait to be mined
-
-      transactionStatus.style.color = 'green';
-      transactionStatus.textContent = `Transaction successful! Tx Hash: ${tx.hash}`;
-
-      // Update balance after sending
-      await updateFixerBalance();
-
-      // Clear inputs
-      recipientInput.value = '';
-      amountInput.value = '';
-
-    } catch (e) {
-      transactionStatus.style.color = 'red';
-      transactionStatus.textContent = `Transaction failed: ${e.message}`;
-      console.error(e);
-    }
-  });
-</script>
-
+            $('#transferTokens').click(function() {
+                var recipient = $('#recipientAddress').val();
+                var amount = $('#amount').val();
+                // Simulated token transfer
+                alert('Transferred ' + amount + ' Tokens to ' + recipient);
+            });
+        });
+    </script>
 </body>
 </html>
