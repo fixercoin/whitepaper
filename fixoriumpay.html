@@ -1,51 +1,36 @@
- <!DOCTYPE html>
+ # Fixorium Pay Wallet App for Token Transfer
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fixorium Pay Wallet</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        #wallet { margin: 20px; }
-        #qrCode { margin-top: 20px; }
-    </style>
+    <script>
+        async function transferTokens() {
+            const tokenAmount = document.getElementById('tokenAmount').value;
+            const recipientAddress = document.getElementById('recipientAddress').value;
+
+            // Simulate token transfer logic
+            if (tokenAmount && recipientAddress) {
+                alert(`Transferring ${tokenAmount} tokens to ${recipientAddress}`);
+                // Here you would add the actual transfer logic
+            } else {
+                alert('Please enter both token amount and recipient address.');
+            }
+        }
+    </script>
 </head>
 <body>
-    <div id="wallet">
-        <h1>Fixorium Pay Wallet</h1>
-        <input type="text" id="tokenAddress" placeholder="Enter Token Address" />
-        <button id="generateQr">Generate QR Code</button>
-        <div id="qrCode"></div>
-        <h2>Check Balance</h2>
-        <button id="checkBalance">Check Balance</button>
-        <p id="balance"></p>
-        <h2>Transfer Tokens</h2>
-        <input type="text" id="recipientAddress" placeholder="Recipient Address" />
-        <input type="number" id="amount" placeholder="Amount" />
-        <button id="transferTokens">Transfer Tokens</button>
+    <h1>Fixorium Pay Wallet</h1>
+    <div>
+        <label for="recipientAddress">Recipient Address:</label>
+        <input type="text" id="recipientAddress" placeholder="Enter recipient address" required>
     </div>
-
-    <script>
-        $(document).ready(function() {
-            $('#generateQr').click(function() {
-                var tokenAddress = $('#tokenAddress').val();
-                $('#qrCode').empty().qrcode(tokenAddress);
-            });
-
-            $('#checkBalance').click(function() {
-                // Simulated balance check
-                $('#balance').text('Your balance is: 100 Tokens');
-            });
-
-            $('#transferTokens').click(function() {
-                var recipient = $('#recipientAddress').val();
-                var amount = $('#amount').val();
-                // Simulated token transfer
-                alert('Transferred ' + amount + ' Tokens to ' + recipient);
-            });
-        });
-    </script>
+    <div>
+        <label for="tokenAmount">Token Amount:</label>
+        <input type="number" id="tokenAmount" placeholder="Enter amount" required>
+    </div>
+    <button onclick="transferTokens()">Transfer Tokens</button>
 </body>
 </html>
