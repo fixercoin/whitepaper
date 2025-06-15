@@ -6,91 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet Application</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-        }
-        .button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-        .balance {
-            font-size: 1.5em;
-            text-align: center;
-            margin: 20px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-<div class="container">
-    <h1>Wallet Application</h1>
-    <div class="balance" id="totalBalance">Total Balance: $0</div>
-    <button class="button" onclick="createWallet()">Create Wallet</button>
-    <button class="button" onclick="loginWallet()">Login Wallet</button>
-    <button class="button" onclick="sendToken()">Send Token</button>
-    <button class="button" onclick="receiveToken()">Receive Token</button>
-</div>
-
-<script>
-    let balance = 0;
-
-    function createWallet() {
-        alert("Wallet Created!");
-    }
-
-    function loginWallet() {
-        alert("Logged into Wallet!");
-    }
-
-    function sendToken() {
-        const amount = prompt("Enter amount to send:");
-        if (amount && amount <= balance) {
-            balance -= amount;
-            updateBalance();
-            alert(`Sent $${amount}`);
-        } else {
-            alert("Insufficient balance or invalid amount.");
-        }
-    }
-
-    function receiveToken() {
-        const amount = prompt("Enter amount to receive:");
-        if (amount) {
-            balance += parseFloat(amount);
-            updateBalance();
-            alert(`Received $${amount}`);
-        }
-    }
-
-    function updateBalance() {
-        document.getElementById("totalBalance").innerText = `Total Balance: $${balance}`;
-    }
-</script>
-
+    <div id="app">
+        <h1>Wallet Application</h1>
+        <div id="login">
+            <h2>Login</h2>
+            <input type="email" id="email" placeholder="Enter your Gmail" required>
+            <input type="password" id="password" placeholder="Enter your password" required>
+            <button onclick="login()">Login</button>
+        </div>
+        <div id="wallet" style="display:none;">
+            <h2>Wallet Balance</h2>
+            <p>Balance in USD: <span id="balanceUSD">0</span></p>
+            <p>Balance in Tokens: <span id="balanceTokens">0</span></p>
+            <p>Balance in PKR: <span id="balancePKR">0</span></p>
+            <button onclick="scanAddress()">Scan Address</button>
+            <input type="text" id="address" placeholder="Enter address" required>
+            <input type="number" id="amount" placeholder="Amount to send" required>
+            <button onclick="sendToken()">Send Token</button>
+            <button onclick="receiveToken()">Receive Token</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
