@@ -1,43 +1,96 @@
- # Account Management System
+ # Wallet Application
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Management</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Wallet Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .balance {
+            font-size: 1.5em;
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Create New Account</h1>
-        <form id="createAccountForm">
-            <input type="text" id="username" placeholder="Username" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Create Account</button>
-        </form>
 
-        <h2>Fixercoin Balance</h2>
-        <div id="fixercoinBalance">0 FIX</div>
+<div class="container">
+    <h1>Wallet Application</h1>
+    <div class="balance" id="totalBalance">Total Balance: $0</div>
+    <button class="button" onclick="createWallet()">Create Wallet</button>
+    <button class="button" onclick="loginWallet()">Login Wallet</button>
+    <button class="button" onclick="sendToken()">Send Token</button>
+    <button class="button" onclick="receiveToken()">Receive Token</button>
+</div>
 
-        <h2>Balance in USDT</h2>
-        <div id="usdtBalance">0 USDT</div>
+<script>
+    let balance = 0;
 
-        <h2>Balance in PKR</h2>
-        <div id="pkrBalance">0 PKR</div>
+    function createWallet() {
+        alert("Wallet Created!");
+    }
 
-        <h2>Deposit Token</h2>
-        <button id="depositTokenBtn">Deposit Token</button>
-        <div id="depositAddress"></div>
+    function loginWallet() {
+        alert("Logged into Wallet!");
+    }
 
-        <h2>Withdraw Token</h2>
-        <button id="withdrawTokenBtn">Withdraw Token</button>
-        <div id="withdrawAddress"></div>
+    function sendToken() {
+        const amount = prompt("Enter amount to send:");
+        if (amount && amount <= balance) {
+            balance -= amount;
+            updateBalance();
+            alert(`Sent $${amount}`);
+        } else {
+            alert("Insufficient balance or invalid amount.");
+        }
+    }
 
-        <h2>Transaction History</h2>
-        <div id="transactionHistory"></div>
-    </div>
+    function receiveToken() {
+        const amount = prompt("Enter amount to receive:");
+        if (amount) {
+            balance += parseFloat(amount);
+            updateBalance();
+            alert(`Received $${amount}`);
+        }
+    }
 
-    <script src="script.js"></script>
+    function updateBalance() {
+        document.getElementById("totalBalance").innerText = `Total Balance: $${balance}`;
+    }
+</script>
+
 </body>
 </html>
