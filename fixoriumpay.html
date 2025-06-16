@@ -1,27 +1,51 @@
- # Logo Display
+ # FIXORIUM PAY
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Creation</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Fixorium Pay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="logo.png" alt="Logo">
+    <div class="container">
+        <h1>FIXORIUM PAY</h1>
+        <p>MAKE DIGITAL TRANSACTION WITH FIXORIUM PAY APP WITH FIXERCOIN</p>
+        <a href="redirect.html" class="button">REDIRECT PAGE</a>
     </div>
-    <div class="form-container">
-        <form id="accountForm">
-            <input type="text" id="mobileNumber" placeholder="Mobile Number" required>
-            <input type="text" id="verificationCode" placeholder="Verification Code" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-            <button type="submit">Create Account</button>
-            <button type="button" id="loginButton">Login</button>
-        </form>
-    </div>
-    <script src="script.js"></script>
 </body>
 </html>
