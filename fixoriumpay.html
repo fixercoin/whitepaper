@@ -1,94 +1,65 @@
- <!DOCTYPE html>
+ # Login with Solana Wallet Address
 
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Website with Login & Registration Form</title>
-    <link rel="stylesheet" href="style.css" />
-   
-  </head>
-  <body>
-    <!-- Header -->
-    <header class="header">
-      <nav class="nav">
-        <a href="#" class="nav_logo">FIXORIUMPAY</a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Solana Wallet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0070f3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login with Solana Wallet</h2>
+        <input type="text" id="walletAddress" placeholder="Enter your Solana wallet address" />
+        <button id="loginButton">Login</button>
+    </div>
 
-        <ul class="nav_items">
-          <li class="nav_item">
-            <a href="#" class="nav_link">HOME</a>
-            <a href="#" class="nav_link">SEND</a>
-            <a href="#" class="nav_link">RECEIVE</a>
-            <a href="#" class="nav_link">HISTORY</a>
-          </li>
-        </ul>
-
-        <button class="button" id="form-open">LOGIN</button>
-      </nav>
-    </header>
-
-    <!-- Home -->
-    <section class="home">
-      <div class="form_container">
-        <i class="uil uil-times form_close"></i>
-        <!-- Login From -->
-        <div class="form login_form">
-          <form action="#">
-            <h2>LOGIN</h2>
-
-            <div class="input_box">
-              <input type="email" placeholder="Enter your email" required />
-              <i class="uil uil-envelope-alt email"></i>
-            </div>
-            <div class="input_box">
-              <input type="password" placeholder="Enter your password" required />
-              <i class="uil uil-lock password"></i>
-              <i class="uil uil-eye-slash pw_hide"></i>
-            </div>
-
-            <div class="option_field">
-              <span class="checkbox">
-                <input type="checkbox" id="check" />
-                <label for="check">REMEMBER ME</label>
-              </span>
-              <a href="#" class="forgot_pw">FORGOT PASSWORD?</a>
-            </div>
-
-            <button class="button">LOGIN NOW</button>
-
-            <div class="login_signup">DON'T HAVE AN ACCOUNT? <a href="#" id="signup">Signup</a></div>
-          </form>
-        </div>
-
-        <!-- Signup From -->
-        <div class="form signup_form">
-          <form action="#">
-            <h2>SIGN UP</h2>
-
-            <div class="input_box">
-              <input type="email" placeholder="Enter your email" required />
-              <i class="uil uil-envelope-alt email"></i>
-            </div>
-            <div class="input_box">
-              <input type="password" placeholder="Create password" required />
-              <i class="uil uil-lock password"></i>
-              <i class="uil uil-eye-slash pw_hide"></i>
-            </div>
-            <div class="input_box">
-              <input type="password" placeholder="Confirm password" required />
-              <i class="uil uil-lock password"></i>
-              <i class="uil uil-eye-slash pw_hide"></i>
-            </div>
-
-            <button class="button">SIGN UP NOW</button>
-
-            <div class="login_signup">ALREADY HAVE AN ACCOUNT? <a href="#" id="login">Login</a></div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <script src="script.js"></script>
-  </body>
+    <script>
+        document.getElementById('loginButton').addEventListener('click', function() {
+            const walletAddress = document.getElementById('walletAddress').value;
+            if (walletAddress) {
+                alert('Logging in with wallet address: ' + walletAddress);
+                // Add your login logic here
+            } else {
+                alert('Please enter a valid wallet address.');
+            }
+        });
+    </script>
+</body>
 </html>
