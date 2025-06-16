@@ -1,53 +1,67 @@
-<script>
-# Login with Face Scanning
+ # FIXORIUM PAY
 
-// Import necessary libraries
-import cv2
-import numpy as np
-import face_recognition
-
-// Initialize the webcam
-const videoCapture = cv2.VideoCapture(0);
-
-// Load known face encodings and names
-const knownFaceEncodings = [/* array of known face encodings */];
-const knownFaceNames = [/* array of corresponding names */];
-
-// Function to recognize faces
-function recognizeFace() {
-    videoCapture.read((err, frame) => {
-        if (err) {
-            console.error("Error capturing video frame:", err);
-            return;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixorium Pay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .balance {
+            text-align: center;
+            font-size: 1.5em;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fixorium Pay</h1>
+        <div class="balance" id="main-balance">Main Balance: $0.00</div>
+        <button id="make-transaction">Make Transaction</button>
+        <button id="connect-wallet">Connect with Phantom Wallet</button>
+    </div>
 
-        const rgbFrame = frame[:, :, ::-1]; // Convert BGR to RGB
-        const faceLocations = face_recognition.face_locations(rgbFrame);
-        const faceEncodings = face_recognition.face_encodings(rgbFrame, faceLocations);
-
-        faceEncodings.forEach((encoding, index) => {
-            const matches = face_recognition.compare_faces(knownFaceEncodings, encoding);
-            let name = "Unknown";
-
-            if (matches.some(match => match)) {
-                const firstMatchIndex = matches.indexOf(true);
-                name = knownFaceNames[firstMatchIndex];
-            }
-
-            const (top, right, bottom, left) = faceLocations[index];
-            cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2);
-            cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2);
+    <script>
+        document.getElementById('make-transaction').addEventListener('click', function() {
+            alert('Transaction made successfully!');
         });
 
-        cv2.imshow("Face Recognition", frame);
-        if (cv2.waitKey(1) & 0xFF === 27) { // Press 'ESC' to exit
-            videoCapture.release();
-            cv2.destroyAllWindows();
-        }
-    });
-}
-
-// Start face recognition
-recognizeFace();
-
-</script>
+        document.getElementById('connect-wallet').addEventListener('click', function() {
+            alert('Connected to Phantom Wallet!');
+        });
+    </script>
+</body>
+</html>
