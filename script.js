@@ -1,27 +1,32 @@
- // script.js
-let balanceUSD = 0;
-let balanceTokens = 0;
-let balancePKR = 0;
+ const formOpenBtn = document.querySelector("#form-open"),
+  home = document.querySelector(".home"),
+  formContainer = document.querySelector(".form_container"),
+  formCloseBtn = document.querySelector(".form_close"),
+  signupBtn = document.querySelector("#signup"),
+  loginBtn = document.querySelector("#login"),
+  pwShowHide = document.querySelectorAll(".pw_hide");
 
-function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    // Authentication logic here
-    document.getElementById('login').style.display = 'none';
-    document.getElementById('wallet').style.display = 'block';
-}
+formOpenBtn.addEventListener("click", () => home.classList.add("show"));
+formCloseBtn.addEventListener("click", () => home.classList.remove("show"));
 
-function scanAddress() {
-    // Camera scanning logic here
-}
+pwShowHide.forEach((icon) => {
+  icon.addEventListener("click", () => {
+    let getPwInput = icon.parentElement.querySelector("input");
+    if (getPwInput.type === "password") {
+      getPwInput.type = "text";
+      icon.classList.replace("uil-eye-slash", "uil-eye");
+    } else {
+      getPwInput.type = "password";
+      icon.classList.replace("uil-eye", "uil-eye-slash");
+    }
+  });
+});
 
-function sendToken() {
-    const address = document.getElementById('address').value;
-    const amount = document.getElementById('amount').value;
-    // Logic to send token to the address
-}
-
-function receiveToken() {
-    const address = document.getElementById('address').value;
-    // Logic to receive token from the address
-}
+signupBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  formContainer.classList.add("active");
+});
+loginBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  formContainer.classList.remove("active");
+});
