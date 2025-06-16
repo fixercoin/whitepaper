@@ -1,33 +1,38 @@
- # Solana Wallet Login and Token Management
+ # Login with Solana Address
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solana Wallet Login</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Solana Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.29.0/solana-web3.min.js"></script>
 </head>
 <body>
-    <div id="login">
-        <h1>Login with Solana Wallet</h1>
-        <input type="text" id="walletAddress" placeholder="Enter your Solana wallet address">
-        <button onclick="confirmLogin()">Login</button>
-    </div>
+    <h1>Login with Solana Address</h1>
+    <button id="loginButton">Login with Solana</button>
+    <div id="status"></div>
 
-    <div id="mainPage" style="display:none;">
-        <h1>Main Page</h1>
-        <p>Your Balance: <span id="balance">0</span> SOL</p>
-        <input type="text" id="sendAddress" placeholder="Recipient Address">
-        <input type="number" id="sendAmount" placeholder="Amount to Send">
-        <button onclick="sendToken()">Send Token</button>
-        <button onclick="checkBalance()">Check Balance</button>
-        <div id="receiveSection">
-            <h2>Receive Tokens</h2>
-            <button onclick="receiveToken()">Receive Token</button>
-        </div>
-    </div>
+    <script>
+        const { Connection, PublicKey, clusterApiUrl } = window.solanaWeb3;
 
-    <script src="script.js"></script>
+        const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+        document.getElementById('loginButton').addEventListener('click', async () => {
+            if (window.solana) {
+                try {
+                    const response = await window.solana.connect();
+                    const publicKey = response.publicKey.toString();
+                    document.getElementById('status').innerText = `Logged in: ${publicKey}`;
+                    // Redirect to index page or perform further actions
+                } catch (err) {
+                    console.error(err);
+                    document.getElementById('status').innerText = 'Connection failed';
+                }
+            } else {
+                alert('Solana wallet not found. Please install a wallet extension.');
+            }
+        });
+    </script>
 </body>
 </html>
