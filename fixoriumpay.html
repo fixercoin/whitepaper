@@ -1,38 +1,50 @@
- # Login with Solana Address
+ # Login with Face Scanning
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solana Login</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/solana-web3.js/1.29.0/solana-web3.min.js"></script>
-</head>
-<body>
-    <h1>Login with Solana Address</h1>
-    <button id="loginButton">Login with Solana</button>
-    <div id="status"></div>
+// Import necessary libraries
+import cv2
+import numpy as np
+import face_recognition
 
-    <script>
-        const { Connection, PublicKey, clusterApiUrl } = window.solanaWeb3;
+// Initialize the webcam
+const videoCapture = cv2.VideoCapture(0);
 
-        const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+// Load known face encodings and names
+const knownFaceEncodings = [/* array of known face encodings */];
+const knownFaceNames = [/* array of corresponding names */];
 
-        document.getElementById('loginButton').addEventListener('click', async () => {
-            if (window.solana) {
-                try {
-                    const response = await window.solana.connect();
-                    const publicKey = response.publicKey.toString();
-                    document.getElementById('status').innerText = `Logged in: ${publicKey}`;
-                    // Redirect to index page or perform further actions
-                } catch (err) {
-                    console.error(err);
-                    document.getElementById('status').innerText = 'Connection failed';
-                }
-            } else {
-                alert('Solana wallet not found. Please install a wallet extension.');
+// Function to recognize faces
+function recognizeFace() {
+    videoCapture.read((err, frame) => {
+        if (err) {
+            console.error("Error capturing video frame:", err);
+            return;
+        }
+
+        const rgbFrame = frame[:, :, ::-1]; // Convert BGR to RGB
+        const faceLocations = face_recognition.face_locations(rgbFrame);
+        const faceEncodings = face_recognition.face_encodings(rgbFrame, faceLocations);
+
+        faceEncodings.forEach((encoding, index) => {
+            const matches = face_recognition.compare_faces(knownFaceEncodings, encoding);
+            let name = "Unknown";
+
+            if (matches.some(match => match)) {
+                const firstMatchIndex = matches.indexOf(true);
+                name = knownFaceNames[firstMatchIndex];
             }
+
+            const (top, right, bottom, left) = faceLocations[index];
+            cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2);
+            cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2);
         });
-    </script>
-</body>
-</html>
+
+        cv2.imshow("Face Recognition", frame);
+        if (cv2.waitKey(1) & 0xFF === 27) { // Press 'ESC' to exit
+            videoCapture.release();
+            cv2.destroyAllWindows();
+        }
+    });
+}
+
+// Start face recognition
+recognizeFace();
