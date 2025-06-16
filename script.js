@@ -1,32 +1,31 @@
- const formOpenBtn = document.querySelector("#form-open"),
-  home = document.querySelector(".home"),
-  formContainer = document.querySelector(".form_container"),
-  formCloseBtn = document.querySelector(".form_close"),
-  signupBtn = document.querySelector("#signup"),
-  loginBtn = document.querySelector("#login"),
-  pwShowHide = document.querySelectorAll(".pw_hide");
+ // script.js
+let balance = 0;
 
-formOpenBtn.addEventListener("click", () => home.classList.add("show"));
-formCloseBtn.addEventListener("click", () => home.classList.remove("show"));
+function confirmLogin() {
+    const walletAddress = document.getElementById('walletAddress').value;
+    // Call PHP function to confirm login and get balance
+    balance = <?php echo confirmLogin("walletAddress"); ?>;
+    document.getElementById('balance').innerText = balance;
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('mainPage').style.display = 'block';
+}
 
-pwShowHide.forEach((icon) => {
-  icon.addEventListener("click", () => {
-    let getPwInput = icon.parentElement.querySelector("input");
-    if (getPwInput.type === "password") {
-      getPwInput.type = "text";
-      icon.classList.replace("uil-eye-slash", "uil-eye");
-    } else {
-      getPwInput.type = "password";
-      icon.classList.replace("uil-eye", "uil-eye-slash");
-    }
-  });
-});
+function sendToken() {
+    const recipientAddress = document.getElementById('sendAddress').value;
+    const amount = parseFloat(document.getElementById('sendAmount').value);
+    // Call PHP function to send token
+    balance = <?php echo sendToken("recipientAddress", "amount"); ?>;
+    document.getElementById('balance').innerText = balance;
+}
 
-signupBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  formContainer.classList.add("active");
-});
-loginBtn.addEventListener("click", (e) => {
-  e.preventDefault();
-  formContainer.classList.remove("active");
-});
+function checkBalance() {
+    // Call PHP function to check balance
+    balance = <?php echo getBalance($_SESSION['walletAddress']); ?>;
+    document.getElementById('balance').innerText = balance;
+}
+
+function receiveToken() {
+    const amount = 1; // Example amount to receive
+    balance = <?php echo receiveToken("amount"); ?>;
+    document.getElementById('balance').innerText = balance;
+}
