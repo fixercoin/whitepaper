@@ -1,37 +1,26 @@
- # Crypto Wallet
+ # Logo Display
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Wallet</title>
+    <title>Account Creation</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="wallet-container">
-        <h1>Crypto Wallet</h1>
-        <div id="create-wallet">
-            <h2>Create Wallet</h2>
-            <input type="text" id="phrase" placeholder="Enter 12 phrase words">
-            <button onclick="createWallet()">Create Wallet</button>
-        </div>
-        <div id="login-wallet">
-            <h2>Login Wallet</h2>
-            <input type="text" id="login-phrase" placeholder="Enter 12 phrase words">
-            <button onclick="loginWallet()">Login</button>
-        </div>
-        <div id="wallet-balance" style="display:none;">
-            <h2>Your Balance</h2>
-            <p id="balance"></p>
-            <input type="text" id="send-address" placeholder="Recipient Address">
-            <input type="number" id="send-amount" placeholder="Amount to Send">
-            <button onclick="sendToken()">Send Token</button>
-        </div>
-        <div id="receive-token" style="display:none;">
-            <h2>Receive Token</h2>
-            <p>Provide this address to receive tokens: <span id="wallet-address"></span></p>
-        </div>
+    <div class="logo">
+        <img src="logo.png" alt="Logo">
+    </div>
+    <div class="form-container">
+        <form id="accountForm">
+            <input type="text" id="mobileNumber" placeholder="Mobile Number" required>
+            <input type="text" id="verificationCode" placeholder="Verification Code" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <button type="submit">Create Account</button>
+            <button type="button" id="loginButton">Login</button>
+        </form>
     </div>
     <script src="script.js"></script>
 </body>
