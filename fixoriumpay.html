@@ -54,7 +54,40 @@
         <h1>FIXORIUM PAY</h1>
      <div id="image"><center>
   <img src="bank.jpg" width="250px" hieght="250px"></center></div>
-        <div balance" id="main-balance"> BALANCE: $0.00</div>
+        <div balance" ">
+        <script>
+         query GetPumpFunTokenPrice {
+  Solana {
+    DEXTradeByTokens(
+      limit: { count: 1 }
+      orderBy: { descending: Block_Time }
+      where: {
+        Trade: {
+          Currency: { 
+            MintAddress: { is: "H4qKn8FMFha8jJuj8xMryMqRhH3h7GjLuxw7TVixpump" }
+          },
+          Dex: { ProtocolName: { is: "pump" } }
+        },
+        Transaction: { Result: { Success: true } }
+      }
+    ) {
+      Trade {
+        Currency {
+          Name
+          Symbol
+          MintAddress
+        }
+        Price
+        PriceInUSD
+      }
+      Block {
+        Time
+      }
+    }
+  }
+}
+        </script>
+        </div>
         <button id="make-transaction">MAKE TRANSACTION</button>
         <button id="connect-wallet">CONNECT PHANTOM WALLET</button>
     </div>
