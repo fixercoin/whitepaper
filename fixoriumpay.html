@@ -54,8 +54,23 @@
         <h1>FIXORIUM PAY</h1>
      <div id="image"><center>
   <img src="bank.jpg" width="250px" hieght="250px"></center></div>
-        <div balance" ">
-        <script>
+        <div balance"">
+        fetch('https://jsonplaceholder.typicode.com/todos')
+  .then(response => response.json())
+  .then(data => {
+    const toAppend = document.getElementById('toAppend');
+    data.forEach(item => {
+      toAppend.innerHTML += `
+        <div class="card">
+          <p>${item.id}</p>
+          <h2>${item.title}</h2>
+        </div>
+      `;
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
          query GetPumpFunTokenPrice {
   Solana {
     DEXTradeByTokens(
@@ -86,7 +101,7 @@
     }
   }
 }
-        </script>
+        
         </div>
         <button id="make-transaction">MAKE TRANSACTION</button>
         <button id="connect-wallet">CONNECT PHANTOM WALLET</button>
