@@ -3,127 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropdown Menu</title>
+    <title>Gmail Integration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
+        button {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px 0;
         }
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
+        button:hover {
+            background-color: #357ae8;
         }
     </style>
 </head>
 <body>
-
-<div class="dropdown">
-    <button>Menu</button>
-    <div class="dropdown-content">
-        <a href="#signup">Signup</a>
-        <a href="#login">Login</a>
-        <a href="#balance">Balance Detail</a>
-        <a href="#add-balance">Send Request for Adding Balance</a>
-        <a href="#send-balance">Send Balance to Other Account</a>
-        <a href="#history">History Detail</a>
+    <div class="container">
+        <h1>Account Management</h1>
+        <button onclick="signUpWithGmail()">Sign up with Gmail</button>
+        <button onclick="loginWithGmail()">Login with Gmail</button>
+        <button onclick="checkBalance()">Check balance</button>
+        <button onclick="requestBalance()">Request for balance at 03107044833</button>
+        <button onclick="sendBalance()">Send balance</button>
+        <button onclick="viewHistory()">History detail</button>
     </div>
-</div>
 
-<script>
-   // Get the dropdown menu items
-const menuItems = document.querySelectorAll('.dropdown-content a');
+    <script>
+        function signUpWithGmail() {
+            // Sign up logic here
+            alert("Sign up with Gmail initiated.");
+        }
 
-// Add event listener to menu items
-menuItems.forEach(item => {
-  item.addEventListener('click', event => {
-    event.preventDefault();
-    const action = item.getAttribute('href').replace('#', '');
-    handleMenuItemClick(action);
-  });
-});
+        function loginWithGmail() {
+            // Login logic here
+            alert("Login with Gmail initiated.");
+        }
 
-// Function to handle menu item click
-function handleMenuItemClick(action) {
-  switch (action) {
-    case 'signup':
-      // Call signup function or perform signup action
-      signup();
-      break;
-    case 'login':
-      // Call login function or perform login action
-      login();
-      break;
-    case 'balance':
-      // Call balance function or display balance detail
-      balanceDetail();
-      break;
-    case 'add-balance':
-      // Call add balance function or send request for adding balance
-      addBalance();
-      break;
-    case 'send-balance':
-      // Call send balance function or send balance to other account
-      sendBalance();
-      break;
-    case 'history':
-      // Call history function or display history detail
-      historyDetail();
-      break;
-    default:
-      console.log('Unknown menu item clicked');
-  }
-}
+        function checkBalance() {
+            // Check balance logic here
+            alert("Checking balance...");
+        }
 
-// Function definitions
-function signup() {
-  // Add signup functionality here
-  console.log('Signup clicked');
-}
+        function requestBalance() {
+            // Request balance logic here
+            alert("Requesting balance at 03107044833...");
+        }
 
-function login() {
-  // Add login functionality here
-  console.log('Login clicked');
-}
+        function sendBalance() {
+            // Send balance logic here
+            alert("Sending balance...");
+        }
 
-function balanceDetail() {
-  // Add balance detail functionality here
-  console.log('Balance Detail clicked');
-}
-
-function addBalance() {
-  // Add add balance functionality here
-  console.log('Send Request for Adding Balance clicked');
-}
-
-function sendBalance() {
-  // Add send balance functionality here
-  console.log('Send Balance to Other Account clicked');
-}
-
-function historyDetail() {
-  // Add history detail functionality here
-  console.log('History Detail clicked');
- }
-</script>
-
+        function viewHistory() {
+            // View history logic here
+            alert("Viewing history details...");
+        }
+    </script>
 </body>
 </html>
