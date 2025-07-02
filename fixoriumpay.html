@@ -1,81 +1,59 @@
- <!DOCTYPE html>
+ # User Account Management
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixerCoin</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-        }
-        .button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-        .balance {
-            margin: 20px 0;
-            font-size: 1.2em;
-        }
-    </style>
+    <title>User Account Management</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="container">
+        <h1>User Account Management</h1>
+        
+        <div id="signup">
+            <h2>Signup</h2>
+            <form id="signupForm">
+                <input type="text" placeholder="Username" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Signup</button>
+            </form>
+        </div>
 
-<div class="container">
-    <h1>FixerCoin</h1>
-    <div class="balance">Current Balance: 0.000018 USDT</div>
-    <div class="balance">Auto conversion into PKR</div>
-    <button class="button" onclick="signup()">Signup</button>
-    <button class="button" onclick="login()">Login</button>
-    <button class="button" onclick="sendBalanceRequest()">Send Balance Request</button>
-    <button class="button" onclick="send()">Send</button>
-    <button class="button" onclick="viewHistory()">History</button>
-</div>
+        <div id="login">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
 
-<script>
-    function signup() {
-        alert("Signup functionality to be implemented.");
-    }
+        <div id="balance">
+            <h2>Check Balance</h2>
+            <button id="checkBalance">Check Balance</button>
+            <p id="balanceAmount"></p>
+        </div>
 
-    function login() {
-        alert("Login functionality to be implemented.");
-    }
+        <div id="sendBalance">
+            <h2>Send Balance</h2>
+            <form id="sendBalanceForm">
+                <input type="text" placeholder="Amount" required>
+                <input type="text" placeholder="Recipient Number" value="03107044834" readonly>
+                <button type="submit">Send Balance</button>
+            </form>
+        </div>
 
-    function sendBalanceRequest() {
-        alert("Balance request sent to 03044700015.");
-    }
+        <div id="sendHistory">
+            <h2>Send History</h2>
+            <button id="viewHistory">View Send History</button>
+            <ul id="historyList"></ul>
+        </div>
+    </div>
 
-    function send() {
-        alert("Send functionality to be implemented.");
-    }
-
-    function viewHistory() {
-        alert("History functionality to be implemented.");
-    }
-</script>
-
+    <script src="script.js"></script>
 </body>
-</html>
+ </html>
+                 
