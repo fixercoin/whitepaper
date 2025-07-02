@@ -3,47 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Wallet</title>
-    <link rel="stylesheet" href="https:                                                                 
+    <title>Fixorium Wallet</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="bg-dark text-white text-center p-4">
-        Digital Wallet
-    </header>
-    
-    <!-- Balance Section -->
-    <section id="balance" class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <h2>Your Current Balance</h2>
-                <h1 id="balanceAmount">$0.00</h1>
-                <button id="addFundsBtn" class="btn btn-primary">Add Funds</button>
-            </div>
-        </div>
+    <!-- Signup/Login Section -->
+    <section id="auth">
+        <form id="signup-form">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button id="signup-btn">Signup</button>
+        </form>
+        <form id="login-form">
+            <input type="text" id="login-username" placeholder="Username">
+            <input type="password" id="login-password" placeholder="Password">
+            <button id="login-btn">Login</button>
+        </form>
     </section>
-    
-    <!-- Add Funds Modal -->
-    <div class="modal fade" id="addFundsModal" tabindex="-1" role="dialog" aria-labelledby="addFundsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addFundsModalLabel">Add Funds</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input type="number" id="amount" placeholder="Amount">
-                    <button id="addFunds" class="btn btn-success">Add</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https:                                                                        
+    <!-- Wallet Section -->
+    <section id="wallet">
+        <h2>Balance: <span id="balance">0</span></h2>
+        <button id="add-balance-btn">Add Balance</button>
+        <button id="send-btn">Send Fixercoin</button>
+        <button id="history-btn">Transaction History</button>
+        <div id="history"></div>
+    </section>
+
     <script src="script.js"></script>
 </body>
 </html>
