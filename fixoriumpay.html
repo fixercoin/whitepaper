@@ -1,59 +1,105 @@
- # User Account Management
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Account Management</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Account Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav {
+            margin: 20px;
+        }
+        nav select {
+            padding: 10px;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .balance-detail, .histor-detail {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background: #35424a;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #2c3e50;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>User Account Management</h1>
-        
-        <div id="signup">
-            <h2>Signup</h2>
-            <form id="signupForm">
-                <input type="text" placeholder="Username" required>
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit">Signup</button>
-            </form>
-        </div>
 
-        <div id="login">
-            <h2>Login</h2>
-            <form id="loginForm">
-                <input type="email" placeholder="Email" required>
-                <input type="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-        </div>
+<header>
+    <h1>Account Management</h1>
+</header>
 
-        <div id="balance">
-            <h2>Check Balance</h2>
-            <button id="checkBalance">Check Balance</button>
-            <p id="balanceAmount"></p>
-        </div>
+<nav>
+    <select id="menu">
+        <option value="signup">Signup</option>
+        <option value="login">Login</option>
+        <option value="balance">Balance Detail</option>
+        <option value="histor">History Detail</option>
+    </select>
+</nav>
 
-        <div id="sendBalance">
-            <h2>Send Balance</h2>
-            <form id="sendBalanceForm">
-                <input type="text" placeholder="Amount" required>
-                <input type="text" placeholder="Recipient Number" value="03107044834" readonly>
-                <button type="submit">Send Balance</button>
-            </form>
-        </div>
-
-        <div id="sendHistory">
-            <h2>Send History</h2>
-            <button id="viewHistory">View Send History</button>
-            <ul id="historyList"></ul>
-        </div>
+<div class="container">
+    <div class="balance-detail" id="balance-detail" style="display:none;">
+        <h2>Balance Detail</h2>
+        <p>Your current balance is: <span id="balance">0</span></p>
+        <button onclick="sendRequestForBalance()">Send Request for Balance</button>
+        <button onclick="addBalance()">Add Balance</button>
     </div>
 
-    <script src="script.js"></script>
+    <div class="histor-detail" id="histor-detail" style="display:none;">
+        <h2>History Detail</h2>
+        <p>Transaction history will be displayed here.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('menu').addEventListener('change', function() {
+        document.getElementById('balance-detail').style.display = 'none';
+        document.getElementById('histor-detail').style.display = 'none';
+        
+        if (this.value === 'balance') {
+            document.getElementById('balance-detail').style.display = 'block';
+        } else if (this.value === 'histor') {
+            document.getElementById('histor-detail').style.display = 'block';
+        }
+    });
+
+    function sendRequestForBalance() {
+        alert('Request for balance sent.');
+    }
+
+    function addBalance() {
+        let currentBalance = parseInt(document.getElementById('balance').innerText);
+        let newBalance = currentBalance + 100; // Example increment
+        document.getElementById('balance').innerText = newBalance;
+        alert('Balance added successfully.');
+    }
+</script>
+
 </body>
- </html>
-                 
+</html>
