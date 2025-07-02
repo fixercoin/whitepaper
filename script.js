@@ -1,131 +1,62 @@
- class FixercoinWallet {
-  constructor() {
-    this.users = {};
-    this.currentUser = null;
-  }
+ let users = {};
+let currentUser = null;
 
-  // Signup functionfunction
-  signup(username, password) {
-    if (!username || !password) {
-      alert("Please enter both username and password");
-      return;
-    }
-    if (this.users[username]) {
-      alert("Username already exists");
-      return;
-    }
-    this.users[username] = {
-      password,
-      balance: 0,
-      history: []
-    };
-    alert("Signup successful");
-  }
-
-  // Login functionfunction
-  login(username, password) {
-    if (!username || !password) {
-      alert("Please enter both username and password");
-      return;
-    }
-    if (!this.users[username] || this.users[username].password !== password) {
-      alert("Invalid username or password");
-      return;
-    }
-    this.currentUser = username;
-    alert("Login successful");
-    this.showBalance();
-  }
-
-  // Show balance functionfunction
-  showBalance() {
-    if (!this.currentUser) {
-      alert("Please login first");
-      return;
-    }
-    const balance = this.users[this.currentUser].balance;
-    document.getElementById("balance").innerText = balance;
-  }
-
-  // Add balance functionfunction
-  addBalance(amount) {
-    if (!this.currentUser) {
-      alert("Please login first");
-      return;
-    }
-    if (amount <= 0) {
-      alert("Invalid amount");
-      return;
-    }
-    this.users[this.currentUser].balance += amount;
-    this.users[this.currentUser].history.push(`Added ${amount} Fixercoins`);
-    this.showBalance();
-    this.showHistory();
-  }
-
-  // Send functionfunction
-  send(recipient, amount) {
-    if (!this.currentUser) {
-      alert("Please login first");
-      return;
-    }
-    if (amount <= 0) {
-      alert("Invalid amount");
-      return;
-    }
-    if (!this.users[recipient]) {
-      alert("Recipient not found");
-      return;
-    }
-    if (this.users[this.currentUser].balance < amount) {
-      alert("Insufficient balance");
-      return;
-    }
-    this.users[this.currentUser].balance -= amount;
-    this.users[recipient].balance += amount;
-    this.users[this.currentUser].history.push(`Sent ${amount} Fixercoins to ${recipient}`);
-    this.users[recipient].history.push(`Received ${amount} Fixercoins from ${this.currentUser}`);
-    this.showBalance();
-    this.showHistory();
-  }
-
-  // Show history functionfunction
-  showHistory() {
-    if (!this.currentUser) {
-      alert("Please login first");
-      return;
-    }
-    const historyList = this.users[this.currentUser].history;
-    const historyHtml = historyList.map(item => `<li>${item}</li>`).join("");
-    document.getElementById("history-list").innerHTML = historyHtml;
-  }
-}
-
-const wallet = new FixercoinWallet();
-
-// Signup event listener
+// Signup functionality
 document.getElementById("signup-btn").addEventListener("click", () => {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  wallet.signup(username, password);
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    users[username] = {
+        password,
+        balance: 0,
+        history: []
+    };
+    alert("Signup successful!");
 });
 
-// Login event listener
+// Login functionality
 document.getElementById("login-btn").addEventListener("click", () => {
-  const username = document.getElementById("login-username").value;
-  const password = document.getElementById("login-password").value;
-  wallet.login(username, password);
+    const username = document.getElementById("login-username").value;
+    const password = document.getElementById("login-password").value;
+    if (users[username] && users[username].password === password) {
+        currentUser = username;
+        document.getElementById("auth").style.display = "none";
+        document.getElementById("wallet").style.display = "block";
+        updateBalance();
+    } else {
+        alert("Invalid username or password");
+    }
 });
 
-// Add balance event listener
+// Add balance functionality
 document.getElementById("add-balance-btn").addEventListener("click", () => {
-  const amount = parseFloat(document.getElementById("amount").value);
-  wallet.addBalance(amount);
+    // Integrate with Fixorium API to add balance
+    const amount = prompt("Enter amount to add:");
+    users[currentUser].balance += parseFloat(amount);
+    updateBalance();
 });
 
-// Send event listener
+// Send Fixercoin functionality
 document.getElementById("send-btn").addEventListener("click", () => {
-  const recipient = document.getElementById("recipient").value;
-  const amount = parseFloat(document.getElementById("send-amount").value);
-  wallet.send(recipient, amount);
+    // Integrate with Fixorium API to send Fixercoin
+    const recipient = prompt("Enter recipient's username:");
+    const amount = prompt("Enter amount to send:");
+    if (users[currentUser].balance >= parseFloat(amount)) {
+        users[currentUser].balance -= parseFloat(amount);
+        users[recipient].balance += parseFloat(amount);
+        users[currentUser].history.push(`Sent ${amount} Fixercoins to ${recipient}`);
+        updateBalance();
+    } else {
+        alert("Insufficient balance");
+    }
 });
+
+// Transaction history functionality
+document.getElementById("history-btn").addEventListener("click", () => {
+    const history = users[currentUser].history;
+    document.getElementById("history").innerHTML = history.map(item => `<p>${item}</p>`).join("");
+});
+
+// Update balance functionality
+function updateBalance() {
+    document.getElementById("balance").innerText = users[currentUser].balance;
+}
