@@ -3,33 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixorium Wallet</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Banking System</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { width: 300px; margin: auto; }
+        input[type="text"], input[type="password"], input[type="number"] { width: 100%; padding: 10px; margin: 5px 0; }
+        button { padding: 10px; width: 100%; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-    <!-- Signup/Login Section -->
-    <section id="auth">
-        <form id="signup-form">
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <button id="signup-btn">Signup</button>
+    <div class="container">
+        <h2>Signup</h2>
+        <form id="signupForm">
+            <input type="text" id="signupUsername" placeholder="Username" required>
+            <input type="password" id="signupPassword" placeholder="Password" required>
+            <button type="submit">Signup</button>
         </form>
-        <form id="login-form">
-            <input type="text" id="login-username" placeholder="Username">
-            <input type="password" id="login-password" placeholder="Password">
-            <button id="login-btn">Login</button>
+
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">Login</button>
         </form>
-    </section>
 
-    <!-- Wallet Section -->
-    <section id="wallet">
-        <h2>Balance: <span id="balance">0</span></h2>
-        <button id="add-balance-btn">Add Balance</button>
-        <button id="send-btn">Send Fixercoin</button>
-        <button id="history-btn">Transaction History</button>
-        <div id="history"></div>
-    </section>
+        <div id="userSection" class="hidden">
+            <h2>Balance</h2>
+            <p id="balance">Balance: $0</p>
+            <h2>Add Balance</h2>
+            <input type="number" id="addBalanceAmount" placeholder="Amount" required>
+            <button id="addBalanceButton">Add Balance</button>
 
-    <script src="script.js"></script>
+            <h2>Send Money</h2>
+            <input type="text" id="sendToUsername" placeholder="Recipient Username" required>
+            <input type="number" id="sendAmount" placeholder="Amount" required>
+            <button id="sendButton">Send</button>
+
+            <h2>Transaction History</h2>
+            <ul id="historyList"></ul>
+        </div>
+    </div>
+
+    <script>
+        let users = {};
+        let currentUser = null;
+
+        document.getElementById('signupForm').onsubmit = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            users[username] = { password, balance: 0, history: [] };
+            alert('Signup successful!');
+        };
+
+        document.getElementById('loginForm').onsubmit = function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            if (users[username] && users[username].password === password) {
+                currentUser = username;
+                document.getElementById('userSection').classList.remove('hidden');
+                document.getElementById('balance').innerText = `Balance: $${users[username].balance}`;
+                alert('Login successful!');
+            } else {
+                alert('Invalid credentials!');
+            }
+        };
+
+        document.getElementById('addBalanceButton').onclick = function() {
+            const amount = parseFloat(document.getElementById('addBalanceAmount').value);
+            if (currentUser && amount > 0) {
+                users[currentUser].balance += amount;
+                document.getElementById('balance').innerText = `Balance: $${users[currentUser].balance}`;
+                alert('Balance added!');
+            }
+        };
+
+        document.getElementById('sendButton').onclick = function() {
+            const recipient = document.getElementById('sendToUsername').value;
+            const amount = parseFloat(document.getElementById('sendAmount').value);
+            if (currentUser && users[recipient] && amount > 0 && users[currentUser].balance >= amount) {
+                users[currentUser].balance -= amount;
+                users[recipient].balance += amount;
+                users[currentUser].history.push(`Sent $${amount} to ${recipient}`);
+                users[recipient].history.push(`Received $${amount} from ${currentUser}`);
+                document.getElementById('balance').innerText = `Balance: $${users[currentUser].balance}`;
+                updateHistory();
+                alert('Money sent!');
+            }
+        };
+
+        function updateHistory() {
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            users[currentUser].history.forEach(transaction => {
+                const li = document.createElement('li');
+                li.innerText = transaction;
+                historyList.appendChild(li);
+            });
+        }
+    </script>
 </body>
 </html>
