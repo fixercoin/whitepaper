@@ -3,106 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Banking System</title>
+    <title>FixerCoin</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 300px; margin: auto; }
-        input[type="text"], input[type="password"], input[type="number"] { width: 100%; padding: 10px; margin: 5px 0; }
-        button { padding: 10px; width: 100%; }
-        .hidden { display: none; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .balance {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Signup</h2>
-        <form id="signupForm">
-            <input type="text" id="signupUsername" placeholder="Username" required>
-            <input type="password" id="signupPassword" placeholder="Password" required>
-            <button type="submit">Signup</button>
-        </form>
 
-        <h2>Login</h2>
-        <form id="loginForm">
-            <input type="text" id="loginUsername" placeholder="Username" required>
-            <input type="password" id="loginPassword" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
+<div class="container">
+    <h1>FixerCoin</h1>
+    <div class="balance">Current Balance: 0.000018 USDT</div>
+    <div class="balance">Auto conversion into PKR</div>
+    <button class="button" onclick="signup()">Signup</button>
+    <button class="button" onclick="login()">Login</button>
+    <button class="button" onclick="sendBalanceRequest()">Send Balance Request</button>
+    <button class="button" onclick="send()">Send</button>
+    <button class="button" onclick="viewHistory()">History</button>
+</div>
 
-        <div id="userSection" class="hidden">
-            <h2>Balance</h2>
-            <p id="balance">Balance: $0</p>
-            <h2>Add Balance</h2>
-            <input type="number" id="addBalanceAmount" placeholder="Amount" required>
-            <button id="addBalanceButton">Add Balance</button>
+<script>
+    function signup() {
+        alert("Signup functionality to be implemented.");
+    }
 
-            <h2>Send Money</h2>
-            <input type="text" id="sendToUsername" placeholder="Recipient Username" required>
-            <input type="number" id="sendAmount" placeholder="Amount" required>
-            <button id="sendButton">Send</button>
+    function login() {
+        alert("Login functionality to be implemented.");
+    }
 
-            <h2>Transaction History</h2>
-            <ul id="historyList"></ul>
-        </div>
-    </div>
+    function sendBalanceRequest() {
+        alert("Balance request sent to 03044700015.");
+    }
 
-    <script>
-        let users = {};
-        let currentUser = null;
+    function send() {
+        alert("Send functionality to be implemented.");
+    }
 
-        document.getElementById('signupForm').onsubmit = function(e) {
-            e.preventDefault();
-            const username = document.getElementById('signupUsername').value;
-            const password = document.getElementById('signupPassword').value;
-            users[username] = { password, balance: 0, history: [] };
-            alert('Signup successful!');
-        };
+    function viewHistory() {
+        alert("History functionality to be implemented.");
+    }
+</script>
 
-        document.getElementById('loginForm').onsubmit = function(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            if (users[username] && users[username].password === password) {
-                currentUser = username;
-                document.getElementById('userSection').classList.remove('hidden');
-                document.getElementById('balance').innerText = `Balance: $${users[username].balance}`;
-                alert('Login successful!');
-            } else {
-                alert('Invalid credentials!');
-            }
-        };
-
-        document.getElementById('addBalanceButton').onclick = function() {
-            const amount = parseFloat(document.getElementById('addBalanceAmount').value);
-            if (currentUser && amount > 0) {
-                users[currentUser].balance += amount;
-                document.getElementById('balance').innerText = `Balance: $${users[currentUser].balance}`;
-                alert('Balance added!');
-            }
-        };
-
-        document.getElementById('sendButton').onclick = function() {
-            const recipient = document.getElementById('sendToUsername').value;
-            const amount = parseFloat(document.getElementById('sendAmount').value);
-            if (currentUser && users[recipient] && amount > 0 && users[currentUser].balance >= amount) {
-                users[currentUser].balance -= amount;
-                users[recipient].balance += amount;
-                users[currentUser].history.push(`Sent $${amount} to ${recipient}`);
-                users[recipient].history.push(`Received $${amount} from ${currentUser}`);
-                document.getElementById('balance').innerText = `Balance: $${users[currentUser].balance}`;
-                updateHistory();
-                alert('Money sent!');
-            }
-        };
-
-        function updateHistory() {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-            users[currentUser].history.forEach(transaction => {
-                const li = document.createElement('li');
-                li.innerText = transaction;
-                historyList.appendChild(li);
-            });
-        }
-    </script>
 </body>
 </html>
