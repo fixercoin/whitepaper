@@ -48,74 +48,65 @@
 </head>
 <body>
  
-  
- 
-    <div class="container">
-        <h1>FIXORIUM PAY</h1>
-     <div id="image"><center>
-  <img src="bank.jpg" width="250px" hieght="250px"></center></div>
-        <div balance""><script>
-        fetch('https://pump.fun/token/H4qKn8FMFha8jJuj8xMryMqRhH3h7GjLuxw7TVixpump')
-  .then(response => response.json())
-  .then(data => {
-    const toAppend = document.getElementById('toAppend');
-    data.forEach(item => {
-      toAppend.innerHTML += `
-        <div class="card">
-          <p>${item.id}</p>
-          <h2>${item.title}</h2>
-        </div>
-      `;
-    });
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-         query GetPumpFunTokenPrice {
-  Solana {
-    DEXTradeByTokens(
-      limit: { count: 1 }
-      orderBy: { descending: Block_Time }
-      where: {
-        Trade: {
-          Currency: { 
-            MintAddress: { is: "H4qKn8FMFha8jJuj8xMryMqRhH3h7GjLuxw7TVixpump" }
-          },
-          Dex: { ProtocolName: { is: "pump" } }
-        },
-        Transaction: { Result: { Success: true } }
-      }
-    ) {
-      Trade {
-        Currency {
-          Name
-          Symbol
-          MintAddress
-        }
-        Price
-        PriceInUSD
-      }
-      Block {
-        Time
-      }
-    }
-  }
-}
-        </script>
-        
-        </div>
-        
-        <button id="connect-wallet"><a href="connectwallet.html">CONNECT PHANTOM WALLET</a></button>
+  # Fixercoin Balance Management
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixercoin Balance Management</title>
+</head>
+<body>
+    <h1>Fixercoin Balance Management</h1>
+    
+    <div id="balance-section">
+        <h2>Add Fixercoin Balance</h2>
+        <input type="number" id="add-balance" placeholder="Enter amount to add">
+        <button onclick="addBalance()">Add Balance</button>
+    </div>
+
+    <div id="total-balance-section">
+        <h2>Total Fixercoin Balance</h2>
+        <p id="total-balance">Total Balance: 0</p>
+    </div>
+
+    <div id="transfer-section">
+        <h2>Transfer Fixercoin Token</h2>
+        <input type="text" id="from-contract" placeholder="From Contract ID">
+        <input type="text" id="to-contract" placeholder="To Contract ID">
+        <input type="number" id="transfer-amount" placeholder="Amount to Transfer">
+        <button onclick="transferToken()">Transfer</button>
     </div>
 
     <script>
-        document.getElementById('make-transaction').addEventListener('click', function() {
-            alert('Transaction made successfully!');
-        });
+        let totalBalance = 0;
 
-        document.getElementById('connect-wallet').addEventListener('click', function() {
-            alert('Connected to Phantom Wallet!');
-        });
+        function addBalance() {
+            const amount = parseFloat(document.getElementById('add-balance').value);
+            if (!isNaN(amount) && amount > 0) {
+                totalBalance += amount;
+                document.getElementById('total-balance').innerText = 'Total Balance: ' + totalBalance;
+                document.getElementById('add-balance').value = '';
+            }
+        }
+
+        function transferToken() {
+            const fromContract = document.getElementById('from-contract').value;
+            const toContract = document.getElementById('to-contract').value;
+            const amount = parseFloat(document.getElementById('transfer-amount').value);
+            if (!isNaN(amount) && amount > 0 && amount <= totalBalance) {
+                totalBalance -= amount;
+                document.getElementById('total-balance').innerText = 'Total Balance: ' + totalBalance;
+                alert(`Transferred ${amount} Fixercoin from ${fromContract} to ${toContract}`);
+                document.getElementById('transfer-amount').value = '';
+                document.getElementById('from-contract').value = '';
+                document.getElementById('to-contract').value = '';
+            }
+        }
     </script>
 </body>
 </html>
+
+ 
+    
