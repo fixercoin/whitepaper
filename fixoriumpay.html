@@ -4,43 +4,134 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fixercoin Wallet</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      width: 300px;
+      margin: 0 auto;
+    }
+    .signup-form, .login-form, .wallet {
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"], input[type="password"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3e8e41;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <div class="signup-form" id="signup-form">
+    <div class="signup-form">
       <h2>Signup</h2>
       <input type="text" id="username" placeholder="Username">
       <input type="password" id="password" placeholder="Password">
       <button onclick="signup()">Signup</button>
     </div>
-    <div class="login-form" id="login-form" style="display: none;">
+    <div class="login-form">
       <h2>Login</h2>
       <input type="text" id="login-username" placeholder="Username">
       <input type="password" id="login-password" placeholder="Password">
       <button onclick="login()">Login</button>
     </div>
-    <div class="wallet" id="wallet" style="display: none;">
+    <div class="wallet" style="display: none;">
       <h2>Wallet</h2>
       <p>Balance: <span id="balance">0</span></p>
+      <input type="number" id="amount" placeholder="Amount">
       <button onclick="addBalance()">Add Balance</button>
+      <input type="text" id="recipient" placeholder="Recipient">
+      <input type="number" id="send-amount" placeholder="Amount">
       <button onclick="send()">Send</button>
-      <button onclick="history()">History</button>
-      <div class="add-balance" id="add-balance" style="display: none;">
-        <input type="number" id="amount" placeholder="Amount">
-        <button onclick="addBalanceConfirm()">Confirm</button>
-      </div>
-      <div class="send-form" id="send-form" style="display: none;">
-        <input type="text" id="recipient" placeholder="Recipient">
-        <input type="number" id="send-amount" placeholder="Amount">
-        <button onclick="sendConfirm()">Confirm</button>
-      </div>
-      <div class="history" id="history" style="display: none;">
-        <ul id="history-list"></ul>
-      </div>
+      <button onclick="showHistory()">History</button>
+      <div id="history"></div>
     </div>
   </div>
 
-  <script src="script.js"></script>
-</body>
-</html>
+  <script>
+    let users = {};
+    let currentUser = null;
+
+    function signup() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if (!username || !password) {
+        alert("Please enter both username and password");
+        return;
+      }
+      if (users[username]) {
+        alert("Username already exists");
+        return;
+      }
+      users[username] = {
+        password,
+        balance: 0,
+        history: []
+      };
+      alert("Signup successful");
+      document.querySelector(".signup-form").style.display = "none";
+      document.querySelector(".login-form").style.display = "block";
+    }
+
+    function login() {
+      const username = document.getElementById("login-username").value;
+      const password = document.getElementById("login-password").value;
+      if (!username || !password) {
+        alert("Please enter both username and password");
+        return;
+      }
+      if (!users[username] || users[username].password !== password) {
+        alert("Invalid username or password");
+        return;
+      }
+      currentUser = username;
+      document.querySelector(".login-form").style.display = "none";
+      document.querySelector(".wallet").style.display = "block";
+      showBalance();
+    }
+
+    function showBalance() {
+      if (!currentUser) {
+        alert("Please login first");
+        return;
+      }
+      const balance = users[currentUser].balance;
+      document.getElementById("balance").innerText = balance;
+    }
+
+    function addBalance() {
+      if (!currentUser) {
+        alert("Please login first");
+        return;
+      }
+      const amount = parseFloat(document.getElementById("amount").value);
+      if (amount <= 0) {
+        alert("Invalid amount");
+        return;
+      }
+      users[currentUser].balance += amount;
+      users[currentUser].history.push(`Added ${amount} Fixercoins`);
+      showBalance();
+    }
+
+    function send() {
+      if (!currentUser) {
+        alert("Please login first");
+        return;
