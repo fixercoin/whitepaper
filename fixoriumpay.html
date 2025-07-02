@@ -3,102 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Management</title>
+    <title>Dropdown Menu</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
         }
-        header {
-            background: #35424a;
-            color: #ffffff;
-            padding: 10px 0;
-            text-align: center;
+        .dropdown {
+            position: relative;
+            display: inline-block;
         }
-        nav {
-            margin: 20px;
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
         }
-        nav select {
-            padding: 10px;
-            font-size: 16px;
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
         }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
         }
-        .balance-detail, .histor-detail {
-            margin-top: 20px;
-        }
-        button {
-            padding: 10px 15px;
-            background: #35424a;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #2c3e50;
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>Account Management</h1>
-</header>
-
-<nav>
-    <select id="menu">
-        <option value="signup">Signup</option>
-        <option value="login">Login</option>
-        <option value="balance">Balance Detail</option>
-        <option value="histor">History Detail</option>
-    </select>
-</nav>
-
-<div class="container">
-    <div class="balance-detail" id="balance-detail" style="display:none;">
-        <h2>Balance Detail</h2>
-        <p>Your current balance is: <span id="balance">0</span></p>
-        <button onclick="sendRequestForBalance()">Send Request for Balance</button>
-        <button onclick="addBalance()">Add Balance</button>
-    </div>
-
-    <div class="histor-detail" id="histor-detail" style="display:none;">
-        <h2>History Detail</h2>
-        <p>Transaction history will be displayed here.</p>
+<div class="dropdown">
+    <button>Menu</button>
+    <div class="dropdown-content">
+        <a href="#signup">Signup</a>
+        <a href="#login">Login</a>
+        <a href="#balance">Balance Detail</a>
+        <a href="#add-balance">Send Request for Adding Balance</a>
+        <a href="#send-balance">Send Balance to Other Account</a>
+        <a href="#history">History Detail</a>
     </div>
 </div>
 
 <script>
-    document.getElementById('menu').addEventListener('change', function() {
-        document.getElementById('balance-detail').style.display = 'none';
-        document.getElementById('histor-detail').style.display = 'none';
-        
-        if (this.value === 'balance') {
-            document.getElementById('balance-detail').style.display = 'block';
-        } else if (this.value === 'histor') {
-            document.getElementById('histor-detail').style.display = 'block';
-        }
-    });
+   // Get the dropdown menu items
+const menuItems = document.querySelectorAll('.dropdown-content a');
 
-    function sendRequestForBalance() {
-        alert('Request for balance sent.');
-    }
+// Add event listener to menu items
+menuItems.forEach(item => {
+  item.addEventListener('click', event => {
+    event.preventDefault();
+    const action = item.getAttribute('href').replace('#', '');
+    handleMenuItemClick(action);
+  });
+});
 
-    function addBalance() {
-        let currentBalance = parseInt(document.getElementById('balance').innerText);
-        let newBalance = currentBalance + 100; // Example increment
-        document.getElementById('balance').innerText = newBalance;
-        alert('Balance added successfully.');
-    }
+// Function to handle menu item click
+function handleMenuItemClick(action) {
+  switch (action) {
+    case 'signup':
+      // Call signup function or perform signup action
+      signup();
+      break;
+    case 'login':
+      // Call login function or perform login action
+      login();
+      break;
+    case 'balance':
+      // Call balance function or display balance detail
+      balanceDetail();
+      break;
+    case 'add-balance':
+      // Call add balance function or send request for adding balance
+      addBalance();
+      break;
+    case 'send-balance':
+      // Call send balance function or send balance to other account
+      sendBalance();
+      break;
+    case 'history':
+      // Call history function or display history detail
+      historyDetail();
+      break;
+    default:
+      console.log('Unknown menu item clicked');
+  }
+}
+
+// Function definitions
+function signup() {
+  // Add signup functionality here
+  console.log('Signup clicked');
+}
+
+function login() {
+  // Add login functionality here
+  console.log('Login clicked');
+}
+
+function balanceDetail() {
+  // Add balance detail functionality here
+  console.log('Balance Detail clicked');
+}
+
+function addBalance() {
+  // Add add balance functionality here
+  console.log('Send Request for Adding Balance clicked');
+}
+
+function sendBalance() {
+  // Add send balance functionality here
+  console.log('Send Balance to Other Account clicked');
+}
+
+function historyDetail() {
+  // Add history detail functionality here
+  console.log('History Detail clicked');
+ }
 </script>
 
 </body>
