@@ -1,0 +1,22 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Fixercoin</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Send Fixercoin</h1>
+    <form id="sendForm">
+        <label for="fromAddress">From Contract Address:</label>
+        <input type="text" id="fromAddress" name="fromAddress" required>
+        <label for="toAddress">To Contract Address:</label>
+        <input type="text" id="toAddress" name="toAddress" required>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required>
+        <button type="submit">Send</button>
+    </form>
+    <script src="script.js"></script>
+</body>
+</html>
