@@ -1,114 +1,48 @@
- # Signup with Mobile Number and Password
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Image Layout</title>
+    <style>
+        body {
+            background-image: url('background.jpg');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+        .header-image {
+            display: block;
+            margin: 0 auto;
+            width: 50%;
+        }
+        .dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+        .social-icons {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .social-icons img {
+            width: 30px;
+            margin: 0 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Signup</h1>
-    <form id="signupForm">
-        <label for="mobile">Mobile Number:</label>
-        <input type="text" id="mobile" name="mobile" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Signup</button>
-    </form>
-    <script src="script.js"></script>
-</body>
-</html>
-
-# Login with Mobile Number and Password
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Login</h1>
-    <form id="loginForm">
-        <label for="mobile">Mobile Number:</label>
-        <input type="text" id="mobile" name="mobile" required>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <button type="submit">Login</button>
-    </form>
-    <script src="script.js"></script>
-</body>
-</html>
-
-# Total Balance Detail
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Total Balance</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Total Balance</h1>
-    <div id="balanceDetail">
-        <p>Your Total Balance: <span id="totalBalance">0</span> Fixercoin</p>
-        <button id="historyButton">View History</button>
+    <img src="header-image.jpg" alt="Header Image" class="header-image">
+    <select class="dropdown">
+        <option value="option1">Option 1</option>
+        <option value="option2">Option 2</option>
+        <option value="option3">Option 3</option>
+    </select>
+    <div class="social-icons">
+        <a href="#"><img src="facebook-icon.png" alt="Facebook"></a>
+        <a href="#"><img src="twitter-icon.png" alt="Twitter"></a>
+        <a href="#"><img src="instagram-icon.png" alt="Instagram"></a>
     </div>
-    <script src="script.js"></script>
-</body>
-</html>
-
-# Contact for Buy Fixercoin
-
-<p>Contact for buy Fixercoin at <a href="https://t.me/fixorium">t.me/fixorium</a> or <a href="https://x.com/fixorium">x.com/fixorium</a></p>
-
-# Send Fixercoin
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Fixercoin</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Send Fixercoin</h1>
-    <form id="sendForm">
-        <label for="fromAddress">From Contract Address:</label>
-        <input type="text" id="fromAddress" name="fromAddress" required>
-        <label for="toAddress">To Contract Address:</label>
-        <input type="text" id="toAddress" name="toAddress" required>
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" required>
-        <button type="submit">Send</button>
-    </form>
-    <script src="script.js"></script>
-</body>
-</html>
-
-# Show Remaining Balance with History Detail
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remaining Balance</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Remaining Balance</h1>
-    <div id="remainingBalance">
-        <p>Your Remaining Balance: <span id="remainingAmount">0</span> Fixercoin</p>
-        <button id="historyDetailButton">View History Detail</button>
-    </div>
-    <script src="script.js"></script>
 </body>
 </html>
