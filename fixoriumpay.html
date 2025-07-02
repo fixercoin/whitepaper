@@ -1,46 +1,62 @@
- <!DOCTYPE html>
+ # Header Image
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Layout</title>
-    <style>
-        body {
-            background-image: url('background.jpg');
-            background-size: cover;
-            font-family: Arial, sans-serif;
-        }
-        .header-image {
-            display: block;
-            margin: 0 auto;
-            width: 50%;
-        }
-        .dropdown {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-        .social-icons {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .social-icons img {
-            width: 30px;
-            margin: 0 10px;
-        }
-    </style>
+    <title>Header Image</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <img src="header-image.jpg" alt="Header Image" class="header-image">
-    <select class="dropdown">
-        <option value="register.html"><a href="register.html">REGISTER</a></option>
-        <option value="login.html"><a href="login.html">LOGIN</a></option>
-        <option value="balance.html"><a href="balance.html">BALANCE</a></option>
-     <option value="send.html"><a htef="send.html">SEND TOKEN</a></option>
-     <option value="history.html">HISTORY</option>
-    </select>
-    
+    <header>
+        <img src="header-image.jpg" alt="Header Image" class="header-image">
+        <nav>
+            <ul>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="balance.html">Balance</a></li>
+                <li><a href="add-balance.html">Add Balance</a></li>
+                <li><a href="send.html">Send Token</a></li>
+                <li><a href="history.html">History</a></li>
+            </ul>
+        </nav>
+    </header>
+    <button class="stylish-button"><a href="link.html">Stylish Button</a></button>
+    <div class="social-media-icons">
+        <a href="https://facebook.com" target="_blank">Facebook</a>
+        <a href="https://twitter.com" target="_blank">Twitter</a>
+        <a href="https://instagram.com" target="_blank">Instagram</a>
+    </div>
 </body>
 </html>
+
+<style>
+    .header-image {
+        width: 100%;
+        height: auto;
+    }
+    nav ul {
+        list-style-type: none;
+        padding: 0;
+    }
+    nav ul li {
+        display: inline;
+        margin-right: 20px;
+    }
+    .stylish-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .stylish-button a {
+        color: white;
+        text-decoration: none;
+    }
+    .social-media-icons a {
+        margin-right: 15px;
+    }
+</style>
