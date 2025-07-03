@@ -3,50 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FixerCoin Transaction</title>
+    <title>FIXERCOIN Management</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 50%; margin: auto; }
-        .transaction { margin: 20px 0; }
-        .logout { color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .transaction-history {
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
     </style>
-    <script>
-        setTimeout(function() {
-            window.location.href = "https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/fixoriumpay.html";
-        }, 60000);
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>FixerCoin Transaction</h1>
-        <form id="transactionForm">
-            <label for="sender">Sender:</label>
-            <input type="text" id="sender" required>
-            <label for="receiver">Receiver:</label>
-            <input type="text" id="receiver" required>
-            <label for="amount">Amount (FIXERCOIN):</label>
-            <input type="number" id="amount" required>
-            <button type="submit">Send FIXERCOIN</button>
-        </form>
-        <div id="transactionDetails" class="transaction"></div>
-        <div class="logout">You will be logged out in 1 minute.</div>
+
+<div class="container">
+    <h1>FIXERCOIN Management</h1>
+    <div>
+        <h2>Total Balance: <span id="totalBalance">0</span> FIXERCOIN</h2>
+        <input type="number" id="amount" placeholder="Amount to send" />
+        <input type="text" id="recipient" placeholder="Recipient Address" />
+        <button onclick="sendFIXERCOIN()">Send FIXERCOIN</button>
     </div>
 
-    <script>
-        document.getElementById('transactionForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const sender = document.getElementById('sender').value;
-            const receiver = document.getElementById('receiver').value;
-            const amount = document.getElementById('amount').value;
+    <div class="transaction-history">
+        <h2>Transaction History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Recipient</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="historyTable">
+            </tbody>
+        </table>
+    </div>
+</div>
 
-            // Simulate balance change in database (SQL)
-            // Assuming a function updateBalance exists
-            // updateBalance(sender, -amount);
-            // updateBalance(receiver, amount);
+<script>
+    let totalBalance = 0;
+    const transactionHistory = [];
 
-            const transactionDetail = `Transaction Successful: ${amount} FIXERCOIN sent from ${sender} to ${receiver}.`;
-            document.getElementById('transactionDetails').innerText = transactionDetail;
+    function sendFIXERCOIN() {
+        const amount = parseFloat(document.getElementById('amount').value);
+        const recipient = document.getElementById('recipient').value;
+
+        if (amount > 0 && recipient) {
+            totalBalance -= amount;
+            transactionHistory.push({ recipient, amount, date: new Date().toLocaleString() });
+            updateUI();
+        } else {
+            alert("Please enter a valid amount and recipient.");
+        }
+    }
+
+    function updateUI() {
+        document.getElementById('totalBalance').innerText = totalBalance;
+        const historyTable = document.getElementById('historyTable');
+        historyTable.innerHTML = '';
+        transactionHistory.forEach(transaction => {
+            const row = `<tr>
+                            <td>${transaction.recipient}</td>
+                            <td>${transaction.amount}</td>
+                            <td>${transaction.date}</td>
+                         </tr>`;
+            historyTable.innerHTML += row;
         });
-    </script>
+    }
+</script>
+
 </body>
 </html>
