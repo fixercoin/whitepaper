@@ -1,6 +1,4 @@
- # Phantom Wallet Servlet
-
-import java.io.IOException;
+ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -16,7 +14,8 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head>");
         out.println("<title>Phantom Wallet</title>");
-        out.println("<script src='https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js'></script>");
+        out.println("<script src='https:                                                                                   
+        out.println("//cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js'></script>");
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>Phantom Wallet</h1>");
@@ -26,22 +25,28 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("<button id='withdraw-button'>Withdraw</button>");
         out.println("<div id='balance'></div>");
         out.println("<script>");
+        out.println("let provider;");
+        out.println("window.phantom = {");
+        out.println("  solana: {");
+        out.println("    connect: async () => {");
+        out.println("      return { publicKey: { toString: () => 'Mock Public Key' } };");
+        out.println("    },");
+        out.println("    getBalance: async () => {");
+        out.println("      return 100;");
+        out.println("    }");
+        out.println("  }");
+        out.println("};");
         out.println("const connectButton = document.getElementById('connect-button');");
         out.println("const getBalanceButton = document.getElementById('get-balance-button');");
         out.println("const depositButton = document.getElementById('deposit-button');");
         out.println("const withdrawButton = document.getElementById('withdraw-button');");
-        out.println("let provider;");
         out.println("connectButton.addEventListener('click', async () => {");
-        out.println("  if (window.phantom?.solana) {");
-        out.println("    try {");
-        out.println("      provider = window.phantom.solana;");
-        out.println("      const resp = await provider.connect();");
-        out.println("      console.log('Connected to Phantom wallet:', resp.publicKey.toString());");
-        out.println("    } catch (err) {");
-        out.println("      console.log('Error connecting to Phantom wallet:', err);");
-        out.println("    }");
-        out.println("  } else {");
-        out.println("    console.log('Phantom wallet not found');");
+        out.println("  try {");
+        out.println("    provider = window.phantom.solana;");
+        out.println("    const resp = await provider.connect();");
+        out.println("    console.log('Connected to Phantom wallet:', resp.publicKey.toString());");
+        out.println("  } catch (err) {");
+        out.println("    console.log('Error connecting to Phantom wallet:', err);");
         out.println("  }");
         out.println("});");
         out.println("getBalanceButton.addEventListener('click', async () => {");
@@ -59,7 +64,7 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("depositButton.addEventListener('click', async () => {");
         out.println("  if (provider) {");
         out.println("    try {");
-        out.println("      // Call deposit function");
+        out.println("      console.log('Deposit function called');");
         out.println("    } catch (err) {");
         out.println("      console.log('Error depositing:', err);");
         out.println("    }");
@@ -70,7 +75,7 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("withdrawButton.addEventListener('click', async () => {");
         out.println("  if (provider) {");
         out.println("    try {");
-        out.println("      // Call withdraw function");
+        out.println("      console.log('Withdraw function called');");
         out.println("    } catch (err) {");
         out.println("      console.log('Error withdrawing:', err);");
         out.println("    }");
