@@ -31,6 +31,9 @@
 </html>
 
 <style>
+ #wallet-container {
+    margin-top: 20px;
+ }
  body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -72,7 +75,7 @@ document.getElementById('login-btn').addEventListener('click', async (e) => {
     e.preventDefault();
     const usernameInput = document.getElementById('username').value;
     const passwordInput = document.getElementById('password').value;
-    const response = await fetch('login.html', {
+    const response = await fetch('login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: usernameInput, password: passwordInput }),
@@ -112,8 +115,5 @@ document.getElementById('withdraw-btn').addEventListener('click', async () => {
         const response = await fetch('update_balance.php
 </script>
 
-#wallet-container {
-    margin-top: 20px;
- }
+
  
-</style>
