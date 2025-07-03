@@ -1,4 +1,6 @@
- import java.io.IOException;
+ # Phantom Wallet Servlet
+
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -14,8 +16,7 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head>");
         out.println("<title>Phantom Wallet</title>");
-        out.println("<script src='https:                                                                                   
-        out.println("//cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js'></script>");
+        out.println("<script src='https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js'></script>");
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>Phantom Wallet</h1>");
@@ -69,8 +70,7 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("withdrawButton.addEventListener('click', async () => {");
         out.println("  if (provider) {");
         out.println("    try {");
-        out.println("                                  
-        out.println("// Call withdraw function");
+        out.println("      // Call withdraw function");
         out.println("    } catch (err) {");
         out.println("      console.log('Error withdrawing:', err);");
         out.println("    }");
@@ -82,4 +82,4 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("</body>");
         out.println("</html>");
     }
-                    }
+}
