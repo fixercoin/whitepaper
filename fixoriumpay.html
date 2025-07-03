@@ -30,15 +30,102 @@
     </div>
 
     <script>
-        // Your classes...
+        class Block {
+            constructor(index, previousHash, timestamp, data, hash) {
+                this.index = index;
+                this.previousHash = previousHash;
+                this.timestamp = timestamp;
+                this.data = data;
+                this.hash = hash;
+            }
+        }
+
+        class Blockchain {
+            constructor() {
+                this.chain = [this.createGenesisBlock()];
+            }
+
+            createGenesisBlock() {
+                return new Block(0, "0", Date.now(), "Genesis Block", this.calculateHash(0, "0", Date.now(), "Genesis Block"));
+            }
+
+            calculateHash(index, previousHash, timestamp, data) {
+                const hash = this.sha256(index + previousHash + timestamp + JSON.stringify(data));
+                return hash;
+            }
+
+            sha256(message) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(message);
+                return crypto.subtle.digest('SHA-256', data).then(hash => {
+                    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+                });
+            }
+
+            async addBlock(newBlock) {
+                newBlock.previousHash = (await this.getLatestBlock()).hash;
+                newBlock.hash = await this.calculateHash(newBlock.index, newBlock.previousHash, newBlock.timestamp, newBlock.data);
+                this.chain.push(newBlock);
+            }
+
+            async getLatestBlock() {
+                return this.chain[this.chain.length - 1];
+            }
+
+            async isChainValid() {
+                for (let i = 1; i < this.chain.length; i++) {
+                    const currentBlock = this.chain[i];
+                    const previousBlock = this.chain[i - 1];
+                    if (currentBlock.hash !== await this.calculateHash(currentBlock.index, currentBlock.previousHash, currentBlock.timestamp, currentBlock.data)) {
+                        return false;
+                    }
+                    if (currentBlock.previousHash !== previousBlock.hash) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        class FixerCoin {
+            constructor() {
+                this.blockchain = new Blockchain();
+                this.pendingTransactions = [];
+                this.wallets = {};
+            }
+
+            async createWallet() {
+                const privateKey = await this.generatePrivateKey();
+                const publicKey = await this.generatePublicKey(privateKey);
+                this.wallets[publicKey] = { privateKey, balance: 0 };
+                return { publicKey, privateKey };
+            }
+
+            async generatePrivateKey() {
+                const key = await crypto.subtle.generateKey({
+                    name: "AES-GCM",
+                    length: 256
+                }, true, ["encrypt", "decrypt"]);
+                const privateKey = await crypto.subtle.exportKey("jwk", key);
+                return JSON.stringify(privateKey);
+            }
+
+            async generatePublicKey(privateKey) {
+                const hash = await this.sha256(privateKey);
+                return hash;
+            }
+
+            async sha256(message) {
+                const encoder = new TextEncoder();
+                const data = encoder.encode(message);
+                const hash = await crypto.subtle.digest('SHA-256', data);
+                return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+        }
 
         const fixerCoin = new FixerCoin();
 
         document.getElementById('generate-wallet-btn').addEventListener('click', async () => {
-            const wallet = await fixerCoin.createWallet();
-            document.getElementById('wallet-address').innerText = `Wallet Address: ${wallet.publicKey}`;
-            document.getElementById('private-key').innerText = `Private Key: ${wallet.privateKey}`;
-        });
-    </script>
-</body>
-</html>
+            try {
+                const wallet = await fixerCoin.createWallet();
+                document.getElementById('wallet-address').innerText = `Wallet Address:
