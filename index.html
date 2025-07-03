@@ -74,7 +74,7 @@
                 return;
             }
             currentUser.balance -= amount;
-            users[recipientId] = users[recipientId] || { balance: 0, history: [] };
+            users[recipientId] = users[recipientId] || { balance: 500, history: [] };
             users[recipientId].balance += amount;
             currentUser.history.push(`Sent ${amount} FIXERCOIN to ${recipientId}`);
             users[recipientId].history.push(`Received ${amount} FIXERCOIN from ${Object.keys(users).find(key => users[key] === currentUser)}`);
