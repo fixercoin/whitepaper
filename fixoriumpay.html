@@ -32,14 +32,119 @@
             <ul id="history-list"></ul>
         </section>
     </main>
-    <script src="script.js"></script>
+    
 </body>
 </html>
 
 <style>
 
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
 
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+section {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
+}
+
+button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #444;
+}
+
+input[type="number"], input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#history-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+#history-list li:last-child {
+    border-bottom: none;
+ }
+ 
 
 
  
 </style>
+
+
+<script>
+
+ function loginWithGmail() {
+    // Implement login with Gmail functionality here
+    console.log('Login with Gmail clicked');
+}
+
+function buyTokenWithEasypaisa() {
+    // Implement buy token with Easypaisa functionality here
+    console.log('Buy token with Easypaisa clicked');
+    const amount = document.getElementById('amount').value;
+    // Implement Easypaisa payment gateway API here
+}
+
+function sendTokenToOther() {
+    // Implement send token to other functionality here
+    console.log('Send token to other clicked');
+    const recipient = document.getElementById('recipient').value;
+    const sendAmount = document.getElementById('send-amount').value;
+    // Implement send token functionality here
+}
+
+function viewHistory() {
+    // Implement view history functionality here
+    console.log('View history clicked');
+    const historyList = document.getElementById('history-list');
+    // Implement history API here
+    const history = [
+        { date: '2022-01-01', amount: 100 },
+        { date: '2022-01-02', amount: 200 },
+    ];
+    historyList.innerHTML = '';
+    history.forEach(item => {
+        const listItem = document.createElement('li');
+        listItem.innerText = `${item.date}: ${item.amount}`;
+        historyList.append
+</script>
