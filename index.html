@@ -51,31 +51,37 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome</h1>
-        <p class="balance">Balance: 50 FIXERCOIN</p>
+        <h1>Total Balance: 500 FIXERCOIN</h1>
+        <p>Received as SIGNUP reward</p>
         <input type="text" id="recipient-id" placeholder="Recipient ID">
         <input type="text" id="amount" placeholder="Amount">
         <button id="send-btn">Send FIXERCOIN</button>
-        <h2>Contract for adding FIXERCOIN</h2>
-        <p>Contract Address: 0x1234567890abcdef</p>
-        <h2>HISTORY DETAIL</h2>
-        <p>Transaction History:</p>
+        <p id="balance-after-send"></p>
+        <h2>FIXERCOIN HISTORY DETAIL</h2>
         <ul id="transaction-history">
-            <li>Transaction 1: Sent 10 FIXERCOIN to 0x1234567890abcdef</li>
-            <li>Transaction 2: Received 20 FIXERCOIN from 0x9876543210fedcba</li>
         </ul>
     </div>
 
     <script>
+        let balance = 500;
         setTimeout(() => {
-            window.location.href = 'https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/fixoriumpay.html';
-        }, 60000); // 1 minute
+            window.location.href = 'https:                                                                                             
+        }, 60000);            
 
         const sendBtn = document.getElementById('send-btn');
         sendBtn.addEventListener('click', () => {
             const recipientId = document.getElementById('recipient-id').value;
-            const amount = document.getElementById('amount').value;
-            // Add logic to send FIXERCOIN to recipient
+            const amount = parseInt(document.getElementById('amount').value);
+            if (amount > balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+            balance -= amount;
+            document.getElementById('balance-after-send').innerText = `Balance after send: ${balance} FIXERCOIN`;
+            const transactionHistory = document.getElementById('transaction-history');
+            const transaction = document.createElement('li');
+            transaction.innerText = `Sent ${amount} FIXERCOIN to ${recipientId}`;
+            transactionHistory.appendChild(transaction);
             alert(`FIXERCOIN sent successfully! Recipient ID: ${recipientId}, Amount: ${amount}`);
         });
     </script>
