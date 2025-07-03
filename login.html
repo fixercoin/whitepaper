@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,33 +17,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             background-color: #fff;
-        }
-        input[type="email"], input[type="password"] {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            margin-bottom: 20px;
-        }
-        button {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #3e8e41;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-bottom: 20px;
+            text-align: center;
         }
     </style>
 </head>
@@ -51,39 +25,28 @@
     <div class="container">
         <h1>Login</h1>
         <form id="login-form">
-            <input type="email" id="gmail-id" placeholder="Gmail ID">
+            <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Password">
             <button id="login-btn">Login</button>
-            <div id="error" class="error"></div>
         </form>
+        <div id="response"></div>
     </div>
 
     <script>
-        const loginForm = document.getElementById('login-form');
-        const gmailIdInput = document.getElementById('gmail-id');
-        const passwordInput = document.getElementById('password');
-        const errorDiv = document.getElementById('error');
-
-        loginForm.addEventListener('submit', (e) => {
+        document.getElementById('login-btn').addEventListener('click', async (e) => {
             e.preventDefault();
-            const gmailId = gmailIdInput.value.trim();
-            const password = passwordInput.value.trim();
-
-            if (!gmailId || !password) {
-                errorDiv.innerText = 'All fields are required!';
-                return;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const response = await fetch('login.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, password: password }),
+            });
+            const data = await response.json();
+            document.getElementById('response').innerText = data.message;
+            if (data.success) {
+                window.location.href = 'dashboard.php';
             }
-
-            // Get stored data from local storage
-            const users = JSON.parse(localStorage.getItem('users')) || {};
-
-            if (!users[gmailId] || users[gmailId].password !== password) {
-                errorDiv.innerText = 'Invalid Gmail ID or password!';
-                return;
-            }
-
-            // Redirect to index page
-            window.location.href = 'https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/index.html';
         });
     </script>
 </body>
