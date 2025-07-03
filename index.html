@@ -3,85 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Balance</title>
+    <title>FixerCoin Transaction</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .container {
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-            text-align: center;
-        }
-        .balance {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            margin-bottom: 20px;
-        }
-        button {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        button:hover {
-            background-color: #3e8e41;
-        }
+        body { font-family: Arial, sans-serif; }
+        .container { width: 50%; margin: auto; }
+        .transaction { margin: 20px 0; }
+        .logout { color: red; }
     </style>
+    <script>
+        setTimeout(function() {
+            window.location.href = "https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/fixoriumpay.html";
+        }, 60000);
+    </script>
 </head>
 <body>
     <div class="container">
-        <h1>Balance: <span id="balance">500</span> FIXERCOIN</h1>
-        <input type="text" id="recipient-id" placeholder="Recipient ID">
-        <input type="text" id="amount" placeholder="Amount">
-        <button id="send-btn">Send FIXERCOIN</button>
-        <h2>Transaction History:</h2>
-        <div id="transaction-history"></div>
+        <h1>FixerCoin Transaction</h1>
+        <form id="transactionForm">
+            <label for="sender">Sender:</label>
+            <input type="text" id="sender" required>
+            <label for="receiver">Receiver:</label>
+            <input type="text" id="receiver" required>
+            <label for="amount">Amount (FIXERCOIN):</label>
+            <input type="number" id="amount" required>
+            <button type="submit">Send FIXERCOIN</button>
+        </form>
+        <div id="transactionDetails" class="transaction"></div>
+        <div class="logout">You will be logged out in 1 minute.</div>
     </div>
 
     <script>
-        let balance = 500;
-        document.getElementById('balance').innerText = balance;
+        document.getElementById('transactionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const sender = document.getElementById('sender').value;
+            const receiver = document.getElementById('receiver').value;
+            const amount = document.getElementById('amount').value;
 
-        setTimeout(() => {
-            window.location.href = 'https:                                                                                             
-        }, 60000);            
+            // Simulate balance change in database (SQL)
+            // Assuming a function updateBalance exists
+            // updateBalance(sender, -amount);
+            // updateBalance(receiver, amount);
 
-        const sendBtn = document.getElementById('send-btn');
-        sendBtn.addEventListener('click', () => {
-            const recipientId = document.getElementById('recipient-id').value;
-            const amount = parseInt(document.getElementById('amount').value);
-            if (amount > balance) {
-                alert('Insufficient balance!');
-                return;
-            }
-            balance -= amount;
-            document.getElementById('balance').innerText = balance;
-            const transactionHistory = document.getElementById('transaction-history');
-            const transaction = document.createElement('p');
-            transaction.innerText = `Sent ${amount} FIXERCOIN to ${recipientId}`;
-            transactionHistory.appendChild(transaction);
-            alert(`FIXERCOIN sent successfully! Recipient ID: ${recipientId}, Amount: ${amount}`);
+            const transactionDetail = `Transaction Successful: ${amount} FIXERCOIN sent from ${sender} to ${receiver}.`;
+            document.getElementById('transactionDetails').innerText = transactionDetail;
         });
     </script>
 </body>
