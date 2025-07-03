@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Registration</title>
+    <title>Gmail Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,118 +16,61 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-        .input-group {
-            margin-bottom: 20px;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 10px;
-        }
-        .input-group input {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-        }
         .btn {
             width: 100%;
             height: 40px;
             padding: 10px;
             font-size: 16px;
-            background-color: #25D366;
+            background-color: #4285F4;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         .btn:hover {
-            background-color: #1DA335;
+            background-color: #3367D6;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>WhatsApp Registration</h2>
-        <form id="register-form">
-            <div class="input-group">
-                <label for="whatsapp-number">WhatsApp Number:</label>
-                <input type="text" id="whatsapp-number" name="whatsapp-number" required>
-            </div>
-            <button class="btn" id="send-code-btn">Send Code</button>
-        </form>
-        <form id="confirm-form" style="display: none;">
-            <div class="input-group">
-                <label for="confirmation-code">Confirmation Code:</label>
-                <input type="text" id="confirmation-code" name="confirmation-code" required>
-            </div>
-            <button class="btn" id="confirm-btn">Confirm</button>
-        </form>
-        <div id="success-message" style="display: none;">
-            <p>Registration successful! Redirecting to login page...</p>
-        </div>
+        <h2>Gmail Login</h2>
+        <button class="btn" id="login-btn">Login with Gmail</button>
     </div>
 
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-        const apiKey = 'YOUR_WHATSAPP_API_KEY';
-        const apiUrl = 'https:                                     
-
-        document.getElementById('send-code-btn').addEventListener('click', async (e) => {
-            e.preventDefault();
-            const whatsappNumber = document.getElementById('whatsapp-number').value;
-            const confirmationCode = Math.floor(100000 + Math.random() * 900000);
-
-                                                        
-            const response = await fetch(apiUrl, {
+        function handleCredentialResponse(response) {
+            // Verify the token on your server
+            fetch('/verify-token', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${apiKey}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: JSON.stringify({
-                    messaging_product: 'whatsapp',
-                    to: whatsappNumber,
-                    type: 'template',
-                    template: {
-                        name: 'your_template_name',
-                        language: {
-                            code: 'en_US'
-                        },
-                        components: [
-                            {
-                                type: 'body',
-                                parameters: [
-                                    {
-                                        type: 'text',
-                                        text: confirmationCode.toString()
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                })
+                body: `credential=${response.credential}`
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Invalid credentials');
+                }
+            })
+            .catch((error) => console.error(error));
+        }
+
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: 'YOUR_CLIENT_ID',
+                callback: handleCredentialResponse
             });
 
-            if (response.ok) {
-                document.getElementById('register-form').style.display = 'none';
-                document.getElementById('confirm-form').style.display = 'block';
-                document.getElementById('confirm-btn').addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    const userConfirmationCode = document.getElementById('confirmation-code').value;
-                    if (userConfirmationCode == confirmationCode.toString()) {
-                        document.getElementById('confirm-form').style.display = 'none';
-                        document.getElementById('success-message').style.display = 'block';
-                        setTimeout(() => {
-                            window.location.href = 'login.html';
-                        }, 2000);
-                    } else {
-                        alert('Invalid confirmation code. Please try again.');
-                    }
-                });
-            } else {
-                alert('Failed to send confirmation code. Please try again.');
-            }
-        });
+            google.accounts.id.renderButton(
+                document.getElementById('login-btn'),
+                { theme: 'outline', size: 'large' }
+            );
+        };
     </script>
 </body>
 </html>
