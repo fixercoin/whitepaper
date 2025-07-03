@@ -1,4 +1,4 @@
-import java.io.IOException;
+ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -82,4 +82,4 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("</body>");
         out.println("</html>");
     }
-}
+                    }
