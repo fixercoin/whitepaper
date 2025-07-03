@@ -1,1 +1,45 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Token Management System</h1>
+    </header>
+    <main>
+        <section id="login-section">
+            <h2>Login with Gmail</h2>
+            <button id="login-btn" onclick="loginWithGmail()">Login with Gmail</button>
+        </section>
+        <section id="buy-token-section">
+            <h2>Buy Token with Easypaisa</h2>
+            <input type="number" id="amount" placeholder="Enter amount">
+            <button id="buy-token-btn" onclick="buyTokenWithEasypaisa()">Buy Token</button>
+        </section>
+        <section id="send-token-section">
+            <h2>Send Token to Other</h2>
+            <input type="text" id="recipient" placeholder="Recipient's email">
+            <input type="number" id="send-amount" placeholder="Amount to send">
+            <button id="send-token-btn" onclick="sendTokenToOther()">Send Token</button>
+        </section>
+        <section id="history-section">
+            <h2>Transaction History</h2>
+            <button id="view-history-btn" onclick="viewHistory()">View History</button>
+            <ul id="history-list"></ul>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+
+<style>
+
+
+
+
  
+</style>
