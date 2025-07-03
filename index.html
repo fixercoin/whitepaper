@@ -3,84 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transaction Management System</title>
+    <title>Sidra Wallet</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f0f0f0;
         }
-        .transaction-info {
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #fff;
+            text-align: center;
+        }
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
             margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>Transaction Management System</h1>
-    <div class="transaction-info">
-        <h2>Total Balance: <span id="total-balance">0</span></h2>
-        <h2>Balance Sent: <span id="balance-sent">0</span></h2>
-        <h2>Balance Received: <span id="balance-received">0</span></h2>
-        <h2>Balance to Other: <span id="balance-to-other">0</span></h2>
+    <div class="container">
+        <h1>Sidra Wallet</h1>
+        <p>Balance: <span id="balance">0.0</span> SIDRA</p>
+        <button id="receive-btn">Receive SIDRA</button>
+        <button id="send-btn">Send SIDRA</button>
+        <div id="transaction-history"></div>
     </div>
-    <button onclick="confirmTransaction(100, 'send')">Send $100</button>
-    <button onclick="confirmTransaction(150, 'receive')">Receive $150</button>
-    <h3>Transaction History:</h3>
-    <ul id="transaction-history"></ul>
 
     <script>
-        class Transaction {
-            constructor(userId) {
-                this.userId = userId;
-                this.totalBalance = 0;
-                this.balanceSent = 0;
-                this.balanceReceived = 0;
-                this.balanceToOther = 0;
-                this.transactionHistory = [];
-            }
+        let balance = 0.0;
+        document.getElementById('balance').innerText = balance;
 
-            confirmTransaction(amount, transactionType) {
-                if (transactionType === "send") {
-                    this.balanceSent += amount;
-                    this.totalBalance -= amount;
-                    this.balanceToOther += amount;
-                } else if (transactionType === "receive") {
-                    this.balanceReceived += amount;
-                    this.totalBalance += amount;
+        const receiveBtn = document.getElementById('receive-btn');
+        receiveBtn.addEventListener('click', () => {
+            const receivedAmount = prompt('Enter received amount:');
+            if (receivedAmount) {
+                balance += parseFloat(receivedAmount);
+                document.getElementById('balance').innerText = balance.toFixed(1);
+                const transactionHistory = document.getElementById('transaction-history');
+                const transaction = document.createElement('p');
+                transaction.innerText = `Received ${receivedAmount} SIDRA`;
+                transactionHistory.appendChild(transaction);
+            }
+        });
+
+        const sendBtn = document.getElementById('send-btn');
+        sendBtn.addEventListener('click', () => {
+            const recipientAddress = prompt('Enter recipient address:');
+            const amount = prompt('Enter amount to send:');
+            if (recipientAddress && amount) {
+                if (parseFloat(amount) > balance) {
+                    alert('Insufficient balance!');
+                    return;
                 }
-                this.storeData(amount, transactionType);
-                this.updateUI();
+                balance -= parseFloat(amount);
+                document.getElementById('balance').innerText = balance.toFixed(1);
+                const transactionHistory = document.getElementById('transaction-history');
+                const transaction = document.createElement('p');
+                transaction.innerText = `Sent ${amount} SIDRA to ${recipientAddress}`;
+                transactionHistory.appendChild(transaction);
             }
-
-            storeData(amount, transactionType) {
-                const transactionDetail = {
-                    amount: amount,
-                    type: transactionType,
-                    userId: this.userId
-                };
-                this.transactionHistory.push(transactionDetail);
-            }
-
-            updateUI() {
-                document.getElementById('total-balance').innerText = this.totalBalance;
-                document.getElementById('balance-sent').innerText = this.balanceSent;
-                document.getElementById('balance-received').innerText = this.balanceReceived;
-                document.getElementById('balance-to-other').innerText = this.balanceToOther;
-
-                const historyList = document.getElementById('transaction-history');
-                historyList.innerHTML = '';
-                this.transactionHistory.forEach(transaction => {
-                    const listItem = document.createElement('li');
-                    listItem.innerText = `${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}: $${transaction.amount}`;
-                    historyList.appendChild(listItem);
-                });
-            }
-        }
-
-        const userTransaction = new Transaction(1);
-
-        function confirmTransaction(amount, type) {
-            userTransaction.confirmTransaction(amount, type);
-        }
+        });
     </script>
 </body>
 </html>
