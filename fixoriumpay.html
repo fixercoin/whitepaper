@@ -3,148 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Token Management</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Token Management System</h1>
-    </header>
-    <main>
-        <section id="login-section">
-            <h2>Login with Gmail</h2>
-            <button id="login-btn" onclick="loginWithGmail()">Login with Gmail</button>
-        </section>
-        <section id="buy-token-section">
-            <h2>Buy Token with Easypaisa</h2>
-            <input type="number" id="amount" placeholder="Enter amount">
-            <button id="buy-token-btn" onclick="buyTokenWithEasypaisa()">Buy Token</button>
-        </section>
-        <section id="send-token-section">
-            <h2>Send Token to Other</h2>
-            <input type="text" id="recipient" placeholder="Recipient's email">
-            <input type="number" id="send-amount" placeholder="Amount to send">
-            <button id="send-token-btn" onclick="sendTokenToOther()">Send Token</button>
-        </section>
-        <section id="history-section">
-            <h2>Transaction History</h2>
-            <button id="view-history-btn" onclick="viewHistory()">View History</button>
-            <ul id="history-list"></ul>
-        </section>
-    </main>
-    
+    <div class="container">
+        <h2>Registration Form</h2>
+        <form id="register-form" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button id="register-btn" name="register">Register</button>
+        </form>
+        <form id="otp-form" style="display: none;">
+            <label for="otp">Enter OTP:</label>
+            <input type="number" id="otp" name="otp" required>
+            <button id="verify-btn" name="verify">Verify</button>
+        </form>
+        <?php
+            // Database connection settings
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "mydatabase";
+
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            }
+
+            // Check if form is submitted
+            if (isset($_POST['register'])) {
+                $email = $_POST['email'];
+                $otp = rand(100000, 999999);
+
+                // Send OTP to Gmail address
+                $to = $email;
+                $subject = "OTP Verification";
+                $message = "Your OTP is: $otp";
+                $headers = "From: your-email@gmail.com";
+                mail($to, $subject, $message, $headers);
+
+                // Store OTP in session
+                session_start();
+                $_SESSION['otp'] = $otp;
+                $_SESSION['email'] = $email;
+
+                echo "<script>document.getElementById('register-form').style.display = 'none'; document.getElementById('otp-form').style.display = 'block';</script>";
+            }
+
+            // Verify OTP
+            if (isset($_POST['verify'])) {
+                session_start();
+                $otp = $_SESSION['otp'];
+                $email = $_SESSION['email'];
+                $user_otp = $_POST['otp'];
+
+                if ($otp == $user_otp) {
+                    // Insert data into database
+                    $sql = "INSERT INTO users (email) VALUES ('$email')";
+                    if ($conn->query($sql) === TRUE) {
+                        // Redirect to login page
+                        header('Location: login.html');
+                        exit;
+                    } else {
+                        echo "Error: " . $sql . "<br>" . $conn->error;
+                    }
+                } else {
+                    echo "Invalid OTP";
+                }
+            }
+        ?>
+    </div>
 </body>
 </html>
-
-<style>
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-}
-
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-}
-
-section {
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-h2 {
-    margin-top: 0;
-}
-
-button {
-    background-color: #333;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #444;
-}
-
-input[type="number"], input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-}
-
-#history-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#history-list li {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-}
-
-#history-list li:last-child {
-    border-bottom: none;
- }
- 
-
-
- 
-</style>
-
-
-<script>
-
- function loginWithGmail() {
-    // Implement login with Gmail functionality here
-    console.log('Login with Gmail clicked');
-}
-
-function buyTokenWithEasypaisa() {
-    // Implement buy token with Easypaisa functionality here
-    console.log('Buy token with Easypaisa clicked');
-    const amount = document.getElementById('amount').value;
-    // Implement Easypaisa payment gateway API here
-}
-
-function sendTokenToOther() {
-    // Implement send token to other functionality here
-    console.log('Send token to other clicked');
-    const recipient = document.getElementById('recipient').value;
-    const sendAmount = document.getElementById('send-amount').value;
-    // Implement send token functionality here
-}
-
-function viewHistory() {
-    // Implement view history functionality here
-    console.log('View history clicked');
-    const historyList = document.getElementById('history-list');
-    // Implement history API here
-    const history = [
-        { date: '2022-01-01', amount: 100 },
-        { date: '2022-01-02', amount: 200 },
-    ];
-    historyList.innerHTML = '';
-    history.forEach(item => {
-        const listItem = document.createElement('li');
-        listItem.innerText = `${item.date}: ${item.amount}`;
-        historyList.append
-</script>
