@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,13 +19,9 @@
             background-color: #fff;
             text-align: center;
         }
-        .balance-image {
-            width: 250px;
-            height: 250px;
-            margin: 20px auto;
-            border-radius: 10px;
-        }
-        .send-token {
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
             margin-bottom: 20px;
         }
         input[type="text"] {
@@ -55,44 +51,49 @@
 </head>
 <body>
     <div class="container">
-        <h1>Balance</h1>
+        <h1>Welcome</h1>
         <div id="login-check"></div>
         <div id="balance-div" style="display: none;">
-            <img class="balance-image" src="bank.jpg">                                             
-            <div class="send-token">
-                <input type="text" id="token-amount" placeholder="Token Amount">
-                <input type="text" id="recipient-id" placeholder="Recipient ID">
-                <button id="send-token-btn">Send Token</button>
-            </div>
-            <button onclick="window.location.href='https: >                                                            
+            <p class="balance">Balance: 50 FIXERCOIN</p>
+            <input type="text" id="recipient-id" placeholder="Recipient ID">
+            <input type="text" id="amount" placeholder="Amount">
+            <button id="send-btn">Send FIXERCOIN</button>
+            <h2>Contract for adding FIXERCOIN</h2>
+            <p>Contract Address: 0x1234567890abcdef</p>
+            <h2>HISTORY DETAIL</h2>
+            <p>Transaction History:</p>
+            <ul id="transaction-history">
+                <li>Transaction 1: Sent 10 FIXERCOIN to 0x1234567890abcdef</li>
+                <li>Transaction 2: Received 20 FIXERCOIN from 0x9876543210fedcba</li>
+            </ul>
         </div>
     </div>
 
     <script>
         const loginCheckDiv = document.getElementById('login-check');
         const balanceDiv = document.getElementById('balance-div');
-        const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
+        const loggedIn = localStorage.getItem('loggedIn');
 
-        if (token) {
-                                                          
+        if (loggedIn === 'true') {
             balanceDiv.style.display = 'block';
+            setTimeout(() => {
+                localStorage.setItem('loggedIn', 'false');
+                window.location.href = 'fixoriumpay.html';
+            }, 60000); // 1 minute
         } else {
-                                     
             loginCheckDiv.innerHTML = 'Please login to access this page.';
             setTimeout(() => {
-                window.location.href = 'https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/login.html';
+                window.location.href = 'login.html';
             }, 2000);
         }
 
-        const sendTokenBtn = document.getElementById('send-token-btn');
-        sendTokenBtn.addEventListener('click', () => {
-            const tokenAmount = document.getElementById('token-amount').value;
+        const sendBtn = document.getElementById('send-btn');
+        sendBtn.addEventListener('click', () => {
             const recipientId = document.getElementById('recipient-id').value;
-            // Add logic to send token to recipient
-            alert(`Token sent successfully! Token Amount: ${tokenAmount}, Recipient ID: ${recipientId}`);
+            const amount = document.getElementById('amount').value;
+            // Add logic to send FIXERCOIN to recipient
+            alert(`FIXERCOIN sent successfully! Recipient ID: ${recipientId}, Amount: ${amount}`);
         });
     </script>
 </body>
 </html>
-
