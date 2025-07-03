@@ -1,130 +1,132 @@
- <?php
-// Database connection
-$conn = new mysqli("localhost", "username", "password", "database");
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Store user data permanently
-if (isset($_POST['register'])) {
-    $email = $_POST['email'];
-    $privateKey = $_POST['privateKey'];
-    $sql = "INSERT INTO users (email, private_key) VALUES ('$email', '$privateKey')";
-    if ($conn->query($sql) === TRUE) {
-        echo "User registered successfully";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-
-// Login functionality
-if (isset($_POST['login'])) {
-    $privateKey = $_POST['privateKey'];
-    $sql = "SELECT * FROM users WHERE private_key='$privateKey'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $email = $row['email'];
-        $balance = $row['balance'];
-        // Display wallet dashboard
-        ?>
-        <h1>FixerCoin Wallet</h1>
-        <p>Email: <?php echo $email; ?></p>
-        <p>Balance: <?php echo $balance; ?></p>
-        <button onclick="deposit()">Deposit</button>
-        <button onclick="transfer()">Transfer</button>
-        <button onclick="history()">History</button>
-        <?php
-    } else {
-        echo "Invalid private key";
-    }
-}
-
-// Deposit functionality
-if (isset($_POST['deposit'])) {
-    $privateKey = $_POST['privateKey'];
-    $amount = $_POST['amount'];
-    $sql = "UPDATE users SET balance=balance+'$amount' WHERE private_key='$privateKey'";
-    if ($conn->query($sql) === TRUE) {
-        echo "Deposit successful";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-
-// Transfer functionality
-if (isset($_POST['transfer'])) {
-    $privateKey = $_POST['privateKey'];
-    $recipientAddress = $_POST['recipientAddress'];
-    $amount = $_POST['amount'];
-    $sql = "UPDATE users SET balance=balance-'$amount' WHERE private_key='$privateKey'";
-    if ($conn->query($sql) === TRUE) {
-        // Send FixerCoin token to recipient address
-        echo "Transfer successful";
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-}
-
-// History functionality
-if (isset($_POST['history'])) {
-    $privateKey = $_POST['privateKey'];
-    $sql = "SELECT * FROM transactions WHERE private_key='$privateKey'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            echo "Transaction ID: " . $row["transaction_id"]. " - Amount: " . $row["amount"]. "<br>";
-        }
-    } else {
-        echo "No transactions found";
-    }
-}
-
-// Password recovery functionality
-if (isset($_POST['recover'])) {
-    $email = $_POST['email'];
-    $sql = "SELECT * FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $privateKey = $row['private_key'];
-        // Send private key to user's email
-        echo "Private key sent to your email";
-    } else {
-        echo "Email not found";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>FixerCoin Wallet</title>
-    <style>
-        body {
-            background-image: url('background.jpg');
-            background-size: cover;
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>FixerCoin Wallet</h1>
+        <form id="login-form">
+            <input type="text" id="private-key" placeholder="Private Key">
+            <button type="submit">Login</button>
+        </form>
+        <form id="register-form" style="display: none;">
+            <input type="email" id="email" placeholder="Email">
+            <input type="text" id="private-key-register" placeholder="Private Key">
+            <button type="submit">Register</button>
+        </form>
+        <button id="register-btn">Register</button>
+        <button id="login-btn">Login</button>
+        <button id="recover-btn">Recover Private Key</button>
+        <div id="wallet-dashboard" style="display: none;">
+            <p id="email"></p>
+            <p id="balance"></p>
+            <button id="deposit-btn">Deposit</button>
+            <button id="transfer-btn">Transfer</button>
+            <button id="history-btn">History</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+         </html>
+         <style>
+          body {
+    background-image: url('background.jpg');
+    background-size: cover;
+}
+
+.container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    height: 40px;
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+          }
+         
+         </style>
+
+         <script>
+          const loginForm = document.getElementById('login-form');
+const registerForm = document.getElementById('register-form');
+const registerBtn = document.getElementById('register-btn');
+const loginBtn = document.getElementById('login-btn');
+const recoverBtn = document.getElementById('recover-btn');
+const walletDashboard = document.getElementById('wallet-dashboard');
+
+registerBtn.addEventListener('click', () => {
+    registerForm.style.display = 'block';
+    loginForm.style.display = 'none';
+});
+
+loginBtn.addEventListener('click', () => {
+    registerForm.style.display = 'none';
+    loginForm.style.display = 'block';
+});
+
+recoverBtn.addEventListener('click', () => {
+    // Send request to recover private key
+});
+
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const privateKey = document.getElementById('private-key').value;
+    // Send request to login
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ privateKey })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            walletDashboard.style.display = 'block';
+            document.getElementById('email').innerText = data.email;
+            document.getElementById('balance').innerText = data.balance;
+        } else {
+            alert('Invalid private key');
         }
-        .container {
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-            text-align: center;
+    })
+    .catch(error => console.error(error));
+});
+
+registerForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const privateKey = document.getElementById('private-key-register').value;
+    // Send request to register
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, privateKey })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User registered successfully');
+        } else {
+            alert('Error registering user');
         }
-        button {
-            width: 100%;
-            height: 40px;
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style
+    })
+    .catch(error => console.error(error));
+});
+         </script>
