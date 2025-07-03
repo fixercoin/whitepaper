@@ -1,75 +1,32 @@
- <!DOCTYPE html>
+ # Google Login Integration
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixorium Pay</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 20px;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>Google Login</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
 </head>
 <body>
-    <header>
-        <h1>Fixorium Pay</h1>
-        <h2>Digital Transaction</h2>
-        <img src="https://via.placeholder.com/150" alt="Bank Shape" />
-    </header>
-    <div class="container">
-        <button onclick="loginWithGmail()">Login with Gmail</button>
-        <button onclick="accessAccount()">Access Account</button>
-        <button onclick="acceptRequest()">Accept Request</button>
-        <button onclick="permissionAllow()">Permission Allow</button>
-        <button onclick="confirmAction()">Confirm Action</button>
-        <button onclick="getConfirmation()">Get Confirmation</button>
-    </div>
+    <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="sign_in_with" data-size="large" data-logo_alignment="left"></div>
+
     <script>
-        function loginWithGmail() {
-            // Logic for Gmail login
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId());
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+            window.location.href = "index.html";
         }
-        function accessAccount() {
-            // Logic to access account
-        }
-        function acceptRequest() {
-            // Logic to accept request
-        }
-        function permissionAllow() {
-            // Logic to allow permission
-        }
-        function confirmAction() {
-            // Logic to confirm action
-        }
-        function getConfirmation() {
-            window.location.href = "https://tinyurl.com/index#";
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+            });
         }
     </script>
 </body>
