@@ -1,123 +1,130 @@
+ <?php
+// Database connection
+$conn = new mysqli("localhost", "username", "password", "database");
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Store user data permanently
+if (isset($_POST['register'])) {
+    $email = $_POST['email'];
+    $privateKey = $_POST['privateKey'];
+    $sql = "INSERT INTO users (email, private_key) VALUES ('$email', '$privateKey')";
+    if ($conn->query($sql) === TRUE) {
+        echo "User registered successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Login functionality
+if (isset($_POST['login'])) {
+    $privateKey = $_POST['privateKey'];
+    $sql = "SELECT * FROM users WHERE private_key='$privateKey'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $email = $row['email'];
+        $balance = $row['balance'];
+        // Display wallet dashboard
+        ?>
+        <h1>FixerCoin Wallet</h1>
+        <p>Email: <?php echo $email; ?></p>
+        <p>Balance: <?php echo $balance; ?></p>
+        <button onclick="deposit()">Deposit</button>
+        <button onclick="transfer()">Transfer</button>
+        <button onclick="history()">History</button>
+        <?php
+    } else {
+        echo "Invalid private key";
+    }
+}
+
+// Deposit functionality
+if (isset($_POST['deposit'])) {
+    $privateKey = $_POST['privateKey'];
+    $amount = $_POST['amount'];
+    $sql = "UPDATE users SET balance=balance+'$amount' WHERE private_key='$privateKey'";
+    if ($conn->query($sql) === TRUE) {
+        echo "Deposit successful";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// Transfer functionality
+if (isset($_POST['transfer'])) {
+    $privateKey = $_POST['privateKey'];
+    $recipientAddress = $_POST['recipientAddress'];
+    $amount = $_POST['amount'];
+    $sql = "UPDATE users SET balance=balance-'$amount' WHERE private_key='$privateKey'";
+    if ($conn->query($sql) === TRUE) {
+        // Send FixerCoin token to recipient address
+        echo "Transfer successful";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+// History functionality
+if (isset($_POST['history'])) {
+    $privateKey = $_POST['privateKey'];
+    $sql = "SELECT * FROM transactions WHERE private_key='$privateKey'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        while($row = $result->fetch_assoc()) {
+            echo "Transaction ID: " . $row["transaction_id"]. " - Amount: " . $row["amount"]. "<br>";
+        }
+    } else {
+        echo "No transactions found";
+    }
+}
+
+// Password recovery functionality
+if (isset($_POST['recover'])) {
+    $email = $_POST['email'];
+    $sql = "SELECT * FROM users WHERE email='$email'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $privateKey = $row['private_key'];
+        // Send private key to user's email
+        echo "Private key sent to your email";
+    } else {
+        echo "Email not found";
+    }
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallet System</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="login-container">
-        <h1>Login to Your Wallet</h1>
-        <form id="login-form">
-            <input type="text" id="private-key" placeholder="Private Key">
-            <button type="submit">Login</button>
-        </form>
-    </div>
-
-    <div class="wallet-container" style="display: none;">
-        <h1>Wallet Functions</h1>
-        <p id="welcome-message"></p>
-        <button id="direct-access-btn">Direct Access</button>
-    </div>
-
-   
-</body>
-</html>
-
-
-
-
-<style>
-  .login-container, .wallet-container {
-    width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    background-color: #fff;
-    text-align: center;
-}
-
-.login-container input[type="text"] {
-    width: 100%;
-    height: 40px;
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.login-container button[type="submit"] {
-    width: 100%;
-    height: 40px;
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.wallet-container button {
-    width: 100%;
-    height: 40px;
-    background-color: #4CAF50;
-    color: #fff;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-  
- </style>
-
- <script>
-
-  const loginForm = document.getElementById('login-form');
-const walletContainer = document.querySelector('.wallet-container');
-const loginContainer = document.querySelector('.login-container');
-const welcomeMessage = document.getElementById('welcome-message');
-const directAccessBtn = document.getElementById('direct-access-btn');
-
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const privateKey = document.getElementById('private-key').value;
-    try {
-        const response = await fetch('/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ privateKey })
-        });
-        const data = await response.text();
-        if (response.ok) {
-            loginContainer.style.display = 'none';
-            walletContainer.style.display = 'block';
-            welcomeMessage.textContent = data;
-        } else {
-            alert(data);
+    <title>FixerCoin Wallet</title>
+    <style>
+        body {
+            background-image: url('background.jpg');
+            background-size: cover;
         }
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-directAccessBtn.addEventListener('click', async () => {
-    const privateKey = document.getElementById('private-key').value;
-    try {
-        const response = await fetch(`/access-wallet/${privateKey}`);
-        const data = await response.text();
-        if (response.ok) {
-            alert(data);
-        } else {
-            alert(data);
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #fff;
+            text-align: center;
         }
-    } catch (error) {
-        console.error(error);
-    }
-});
-  
- </script>
+        button {
+            width: 100%;
+            height: 40px;
+            background-color: #4CAF50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style
