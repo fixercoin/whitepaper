@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phone Number Verification</title>
+    <title>WhatsApp Registration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -35,62 +35,97 @@
             height: 40px;
             padding: 10px;
             font-size: 16px;
-            background-color: #4CAF50;
+            background-color: #25D366;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         .btn:hover {
-            background-color: #3e8e41;
+            background-color: #1DA335;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Phone Number Verification</h2>
-        <form id="phone-form">
+        <h2>WhatsApp Registration</h2>
+        <form id="register-form">
             <div class="input-group">
-                <label for="phone-number">Phone Number:</label>
-                <input type="text" id="phone-number" name="phone-number" required>
+                <label for="whatsapp-number">WhatsApp Number:</label>
+                <input type="text" id="whatsapp-number" name="whatsapp-number" required>
             </div>
             <button class="btn" id="send-code-btn">Send Code</button>
         </form>
-        <form id="code-form" style="display: none;">
+        <form id="confirm-form" style="display: none;">
             <div class="input-group">
-                <label for="verification-code">Verification Code:</label>
-                <input type="text" id="verification-code" name="verification-code" required>
+                <label for="confirmation-code">Confirmation Code:</label>
+                <input type="text" id="confirmation-code" name="confirmation-code" required>
             </div>
-            <button class="btn" id="submit-code-btn">Submit Code</button>
+            <button class="btn" id="confirm-btn">Confirm</button>
         </form>
         <div id="success-message" style="display: none;">
-            <p>Verification successful! Redirecting to login page...</p>
+            <p>Registration successful! Redirecting to login page...</p>
         </div>
     </div>
 
     <script>
-        let generatedCode = null;
+        const apiKey = 'YOUR_WHATSAPP_API_KEY';
+        const apiUrl = 'https:                                     
 
-        document.getElementById('send-code-btn').addEventListener('click', (e) => {
+        document.getElementById('send-code-btn').addEventListener('click', async (e) => {
             e.preventDefault();
-            const phoneNumber = document.getElementById('phone-number').value;
-            generatedCode = Math.floor(100000 + Math.random() * 900000);
-            console.log(`Verification code sent to ${phoneNumber}: ${generatedCode}`);
-            document.getElementById('phone-form').style.display = 'none';
-            document.getElementById('code-form').style.display = 'block';
-        });
+            const whatsappNumber = document.getElementById('whatsapp-number').value;
+            const confirmationCode = Math.floor(100000 + Math.random() * 900000);
 
-        document.getElementById('submit-code-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            const verificationCode = document.getElementById('verification-code').value;
-            if (verificationCode == generatedCode) {
-                document.getElementById('code-form').style.display = 'none';
-                document.getElementById('success-message').style.display = 'block';
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
+                                                        
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    messaging_product: 'whatsapp',
+                    to: whatsappNumber,
+                    type: 'template',
+                    template: {
+                        name: 'your_template_name',
+                        language: {
+                            code: 'en_US'
+                        },
+                        components: [
+                            {
+                                type: 'body',
+                                parameters: [
+                                    {
+                                        type: 'text',
+                                        text: confirmationCode.toString()
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                })
+            });
+
+            if (response.ok) {
+                document.getElementById('register-form').style.display = 'none';
+                document.getElementById('confirm-form').style.display = 'block';
+                document.getElementById('confirm-btn').addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const userConfirmationCode = document.getElementById('confirmation-code').value;
+                    if (userConfirmationCode == confirmationCode.toString()) {
+                        document.getElementById('confirm-form').style.display = 'none';
+                        document.getElementById('success-message').style.display = 'block';
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    } else {
+                        alert('Invalid confirmation code. Please try again.');
+                    }
+                });
             } else {
-                alert('Invalid verification code. Please try again.');
+                alert('Failed to send confirmation code. Please try again.');
             }
         });
     </script>
