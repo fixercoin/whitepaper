@@ -1,7 +1,6 @@
  <html>
   <head>
     <title>Phantom Wallet</title>
-    <script src='https:                                                                                
   </head>
   <body>
     <h1>Phantom Wallet</h1>
@@ -12,62 +11,66 @@
     <div id='balance'></div>
     <script>
       let provider;
-      window.phantom = {
-        solana: {
-          connect: async () => {
-            return { publicKey: { toString: () => 'Mock Public Key' } };
-          },
-          getBalance: async () => {
-            return 100;
-          }
-        }
-      };
-      const connectButton = document.getElementById('connect-button');
-      const getBalanceButton = document.getElementById('get-balance-button');
-      const depositButton = document.getElementById('deposit-button');
-      const withdrawButton = document.getElementById('withdraw-button');
-      connectButton.addEventListener('click', async () => {
-        try {
-          provider = window.phantom.solana;
-          const resp = await provider.connect();
-          console.log('Connected to Phantom wallet:', resp.publicKey.toString());
-        } catch (err) {
-          console.log('Error connecting to Phantom wallet:', err);
-        }
-      });
-      getBalanceButton.addEventListener('click', async () => {
-        if (provider) {
+      let isConnected = false;
+      let balance = 100;
+      let publicKey = 'Mock Public Key';
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const connectButton = document.getElementById('connect-button');
+        const getBalanceButton = document.getElementById('get-balance-button');
+        const depositButton = document.getElementById('deposit-button');
+        const withdrawButton = document.getElementById('withdraw-button');
+
+        connectButton.addEventListener('click', async () => {
           try {
-            const balance = await provider.getBalance();
-            document.getElementById('balance').innerText = 'Balance: ' + balance;
+            isConnected = true;
+            console.log('Connected to Phantom wallet:', publicKey);
           } catch (err) {
-            console.log('Error getting balance:', err);
+            console.log('Error connecting to Phantom wallet:', err);
           }
-        } else {
-          console.log('Please connect to Phantom wallet first');
-        }
-      });
-      depositButton.addEventListener('click', async () => {
-        if (provider) {
-          try {
-            console.log('Deposit function called');
-          } catch (err) {
-            console.log('Error depositing:', err);
+        });
+
+        getBalanceButton.addEventListener('click', async () => {
+          if (isConnected) {
+            try {
+              document.getElementById('balance').innerText = 'Balance: ' + balance;
+            } catch (err) {
+              console.log('Error getting balance:', err);
+            }
+          } else {
+            console.log('Please connect to Phantom wallet first');
           }
-        } else {
-          console.log('Please connect to Phantom wallet first');
-        }
-      });
-      withdrawButton.addEventListener('click', async () => {
-        if (provider) {
-          try {
-            console.log('Withdraw function called');
-          } catch (err) {
-            console.log('Error withdrawing:', err);
+        });
+
+        depositButton.addEventListener('click', async () => {
+          if (isConnected) {
+            try {
+              balance += 10;
+              console.log('Deposit function called. New balance:', balance);
+            } catch (err) {
+              console.log('Error depositing:', err);
+            }
+          } else {
+            console.log('Please connect to Phantom wallet first');
           }
-        } else {
-          console.log('Please connect to Phantom wallet first');
-        }
+        });
+
+        withdrawButton.addEventListener('click', async () => {
+          if (isConnected) {
+            try {
+              if (balance >= 10) {
+                balance -= 10;
+                console.log('Withdraw function called. New balance:', balance);
+              } else {
+                console.log('Insufficient balance');
+              }
+            } catch (err) {
+              console.log('Error withdrawing:', err);
+            }
+          } else {
+            console.log('Please connect to Phantom wallet first');
+          }
+        });
       });
     </script>
   </body>
