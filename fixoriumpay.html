@@ -3,73 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gmail Login</title>
+    <title>Login with Gmail</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
         }
-        .container {
-            width: 300px;
-            margin: 50px auto;
+        .login-container {
+            background: white;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .btn {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
+        button {
             background-color: #4285F4;
-            color: #fff;
+            color: white;
             border: none;
+            padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
         }
-        .btn:hover {
-            background-color: #3367D6;
+        button:hover {
+            background-color: #357ae8;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Gmail Login</h2>
-        <button class="btn" id="login-btn">Login with Gmail</button>
+    <div class="login-container">
+        <h2>Login with Gmail</h2>
+        <button id="loginBtn">Login with Google</button>
     </div>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-        function handleCredentialResponse(response) {
-            // Verify the token on your server
-            fetch('/verify-token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `credential=${response.credential}`
-            })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    window.location.href = 'index.html';
-                } else {
-                    alert('Invalid credentials');
-                }
-            })
-            .catch((error) => console.error(error));
-        }
+        document.getElementById('loginBtn').onclick = function() {
+            const CLIENT_ID = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
+            const REDIRECT_URI = 'http://tinyurl.com/index#';
+            const SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
+            const AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPE}`;
 
-        window.onload = function () {
-            google.accounts.id.initialize({
-                client_id: 'YOUR_CLIENT_ID',
-                callback: handleCredentialResponse
-            });
-
-            google.accounts.id.renderButton(
-                document.getElementById('login-btn'),
-                { theme: 'outline', size: 'large' }
-            );
+            window.location.href = AUTH_URL;
         };
     </script>
 </body>
