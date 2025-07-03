@@ -1,4 +1,6 @@
- import java.io.IOException;
+ # Phantom Wallet Servlet
+
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
@@ -14,8 +16,7 @@ public class PhantomWalletServlet extends HttpServlet {
         out.println("<html>");
         out.println("<head>");
         out.println("<title>Phantom Wallet</title>");
-        out.println("<script src='https:                                                                                   
-        out.println("//cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js'></script>");
+        out.println("<script src='https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js'></script>");
         out.println("</head>");
         out.println("<body>");
         out.println("<h1>Phantom Wallet</h1>");
