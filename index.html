@@ -3,99 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIXERCOIN Management</title>
+    <title>FIXERCOIN Balance</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        h1 {
-            color: #333;
+            background-color: #f0f0f0;
         }
         .container {
-            background: #fff;
+            width: 300px;
+            margin: 50px auto;
             padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .transaction-history {
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
             border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #fff;
+            text-align: center;
         }
-        th {
-            background-color: #f2f2f2;
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #3e8e41;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>FIXERCOIN Management</h1>
-    <div>
-        <h2>Total Balance: <span id="totalBalance">0</span> FIXERCOIN</h2>
-        <input type="number" id="amount" placeholder="Amount to send" />
-        <input type="text" id="recipient" placeholder="Recipient Address" />
-        <button onclick="sendFIXERCOIN()">Send FIXERCOIN</button>
+    <div class="container">
+        <h1>Total FIXERCOIN Balance: <span id="balance">0.0</span> FIXERCOIN</h1>
+        <p>If you want to add FIXERCOIN, please contact 03017044833.</p>
+        <input type="text" id="recipient-id" placeholder="Recipient Gmail Address">
+        <input type="text" id="amount" placeholder="Amount">
+        <button id="send-btn">Send FIXERCOIN</button>
+        <h2>Transaction History:</h2>
+        <div id="transaction-history"></div>
+        <h2>Received FIXERCOIN:</h2>
+        <input type="text" id="received-amount" placeholder="Received Amount">
+        <button id="accept-btn">Accept Transaction</button>
     </div>
 
-    <div class="transaction-history">
-        <h2>Transaction History</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Recipient</th>
-                    <th>Amount</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody id="historyTable">
-            </tbody>
-        </table>
-    </div>
-</div>
+    <script>
+        let balance = 0.0;
+        document.getElementById('balance').innerText = balance;
 
-<script>
-    let totalBalance = 0;
-    const transactionHistory = [];
-
-    function sendFIXERCOIN() {
-        const amount = parseFloat(document.getElementById('amount').value);
-        const recipient = document.getElementById('recipient').value;
-
-        if (amount > 0 && recipient) {
-            totalBalance -= amount;
-            transactionHistory.push({ recipient, amount, date: new Date().toLocaleString() });
-            updateUI();
-        } else {
-            alert("Please enter a valid amount and recipient.");
-        }
-    }
-
-    function updateUI() {
-        document.getElementById('totalBalance').innerText = totalBalance;
-        const historyTable = document.getElementById('historyTable');
-        historyTable.innerHTML = '';
-        transactionHistory.forEach(transaction => {
-            const row = `<tr>
-                            <td>${transaction.recipient}</td>
-                            <td>${transaction.amount}</td>
-                            <td>${transaction.date}</td>
-                         </tr>`;
-            historyTable.innerHTML += row;
+        const sendBtn = document.getElementById('send-btn');
+        sendBtn.addEventListener('click', () => {
+            const recipientId = document.getElementById('recipient-id').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            if (amount > balance) {
+                alert('Insufficient balance!');
+                return;
+            }
+            balance -= amount;
+            document.getElementById('balance').innerText = balance.toFixed(1);
+            const transactionHistory = document.getElementById('transaction-history');
+            const transaction = document.createElement('p');
+            transaction.innerText = `Sent ${amount} FIXERCOIN to ${recipientId}`;
+            transactionHistory.appendChild(transaction);
+            alert(`FIXERCOIN sent successfully! Recipient ID: ${recipientId}, Amount: ${amount}`);
         });
-    }
-</script>
 
+        const acceptBtn = document.getElementById('accept-btn');
+        acceptBtn.addEventListener('click', () => {
+            const receivedAmount = parseFloat(document.getElementById('received-amount').value);
+            balance += receivedAmount;
+            document.getElementById('balance').innerText = balance.toFixed(1);
+            const transactionHistory = document.getElementById('transaction-history');
+            const transaction = document.createElement('p');
+            transaction.innerText = `Received ${receivedAmount} FIXERCOIN`;
+            transactionHistory.appendChild(transaction);
+            alert(`Transaction accepted! Amount: ${receivedAmount}`);
+        });
+    </script>
 </body>
 </html>
