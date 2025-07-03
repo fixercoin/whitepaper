@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Wallet</title>
+    <title>FixerCoin Wallet</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,54 +23,45 @@
 </head>
 <body>
     <div class="container">
-        <h1>Crypto Wallet</h1>
-        <p>Your Address: <span id="your-address"></span></p>
-        <p>Balance: <span id="balance">0</span> Tokens</p>
-        <input type="text" id="recipient-address" placeholder="Recipient Address">
-        <input type="text" id="amount" placeholder="Amount">
-        <button id="send-btn">Send Tokens</button>
-        <button id="generate-address-btn">Generate Address</button>
+        <h1>FixerCoin Wallet</h1>
+        <button id="generate-wallet-btn">Generate Wallet</button>
+        <p>Wallet Address: <span id="wallet-address"></span></p>
+        <p>Balance: <span id="balance">0</span> FixerCoin</p>
+        <input type="text" id="deposit-amount" placeholder="Deposit Amount">
+        <button id="deposit-btn">Deposit</button>
+        <input type="text" id="withdraw-amount" placeholder="Withdraw Amount">
+        <button id="withdraw-btn">Withdraw</button>
         <div id="transaction-history"></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <script>
-        let wallets = {};
-        let currentUser = null;
+        let wallet = null;
+        let balance = 0;
 
-        function generateAddress() {
-            const address = Math.random().toString(36).substr(2, 10);
-            wallets[address] = { balance: 100, history: [] };
-            return address;
-        }
-
-        document.getElementById('generate-address-btn').addEventListener('click', () => {
-            currentUser = generateAddress();
-            document.getElementById('your-address').innerText = currentUser;
-            document.getElementById('balance').innerText = wallets[currentUser].balance;
+        document.getElementById('generate-wallet-btn').addEventListener('click', async () => {
+            wallet = ethers.Wallet.createRandom();
+            document.getElementById('wallet-address').innerText = wallet.address;
         });
 
-        document.getElementById('send-btn').addEventListener('click', () => {
-            if (!currentUser) {
-                alert('Please generate an address first!');
-                return;
+        document.getElementById('deposit-btn').addEventListener('click', () => {
+            const amount = parseInt(document.getElementById('deposit-amount').value);
+            if (amount > 0) {
+                balance += amount;
+                document.getElementById('balance').innerText = balance;
+                document.getElementById('transaction-history').innerHTML += `<p>Deposited ${amount} FixerCoin</p>`;
             }
-            const recipientAddress = document.getElementById('recipient-address').value;
-            const amount = parseInt(document.getElementById('amount').value);
-            if (!wallets[recipientAddress]) {
-                alert('Recipient address not found!');
-                return;
-            }
-            if (amount > wallets[currentUser].balance) {
+        });
+
+        document.getElementById('withdraw-btn').addEventListener('click', () => {
+            const amount = parseInt(document.getElementById('withdraw-amount').value);
+            if (amount > 0 && amount <= balance) {
+                balance -= amount;
+                document.getElementById('balance').innerText = balance;
+                document.getElementById('transaction-history').innerHTML += `<p>Withdrew ${amount} FixerCoin</p>`;
+            } else {
                 alert('Insufficient balance!');
-                return;
             }
-            wallets[currentUser].balance -= amount;
-            wallets[recipientAddress].balance += amount;
-            wallets[currentUser].history.push(`Sent ${amount} tokens to ${recipientAddress}`);
-            wallets[recipientAddress].history.push(`Received ${amount} tokens from ${currentUser}`);
-            document.getElementById('balance').innerText = wallets[currentUser].balance;
-            document.getElementById('transaction-history').innerHTML += `<p>Sent ${amount} tokens to ${recipientAddress}</p>`;
-            alert(`Tokens sent successfully! Recipient Address: ${recipientAddress}, Amount: ${amount}`);
         });
     </script>
 </body>
