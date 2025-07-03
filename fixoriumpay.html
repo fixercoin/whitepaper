@@ -3,109 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Local Token Transaction Wallet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        input[type="text"], input[type="password"], input[type="number"] {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-        }
-        button {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #3e8e41;
-        }
-    </style>
+    <title>Token Wallet</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Local Token Transaction Wallet</h1>
-        <form id="register-form">
+        <form id="registerForm">
             <h2>Register</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <button id="register-btn">Register</button>
+            <input type="text" id="registerUsername" placeholder="Username" required>
+            <input type="password" id="registerPassword" placeholder="Password" required>
+            <button type="submit">Register</button>
         </form>
-        <form id="login-form">
+        <form id="loginForm">
             <h2>Login</h2>
-            <input type="text" id="login-username" placeholder="Username">
-            <input type="password" id="login-password" placeholder="Password">
-            <button id="login-btn">Login</button>
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">Login</button>
         </form>
-        <form id="transaction-form" style="display: none;">
+        <form id="transactionForm">
             <h2>Transaction</h2>
-            <input type="number" id="amount" placeholder="Amount">
-            <select id="transaction-type">
-                <option value="deposit">Deposit</option>
-                <option value="withdrawal">Withdrawal</option>
+            <input type="number" id="transactionAmount" placeholder="Amount" required>
+            <select id="transactionType">
+                <option value="credit">Credit</option>
+                <option value="debit">Debit</option>
             </select>
-            <button id="transaction-btn">Transaction</button>
+            <button type="submit">Submit Transaction</button>
         </form>
-        <button id="logout-btn" style="display: none;">Logout</button>
+        <button id="logoutButton">Logout</button>
         <div id="message"></div>
     </div>
+    <script src="script.js"></script>
+</body>
+</html>
 
-    <script>
-        let users = JSON.parse(localStorage.getItem('users')) || {};
-        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        let loggedInUser = null;
 
-        document.getElementById('register-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            if (users[username]) {
-                document.getElementById('message').innerText = 'Username already exists!';
-            } else {
-                users[username] = { password };
-                localStorage.setItem('users', JSON.stringify(users));
-                document.getElementById('message').innerText = 'User registered successfully!';
-            }
+ 
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+</style>
+<script>
+
+ $(document).ready(function() {
+    $('#registerForm').on('submit', function(e) {
+        e.preventDefault();
+        const username = $('#registerUsername').val();
+        const password = $('#registerPassword').val();
+        $.post('/register', { username, password }, function(data) {
+            $('#message').text(data.message);
         });
+    });
 
-        document.getElementById('login-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value;
-            const password = document.getElementById('login-password').value;
-            if (users[username] && users[username].password === password) {
-                loggedInUser = username;
-                document.getElementById('login-form').style.display = 'none';
-                document.getElementById('register-form').style.display = 'none';
-                document.getElementById('transaction-form').style.display = 'block';
-                document.getElementById('logout-btn').style.display = 'block';
-                document.getElementById('message').innerText = 'Login successful!';
-            } else {
-                document.getElementById('message').innerText = 'Invalid credentials!';
-            }
+    $('#loginForm').on('submit', function(e) {
+        e.preventDefault();
+        const username = $('#loginUsername').val();
+        const password = $('#loginPassword').val();
+        $.post('/login', { username, password }, function(data) {
+            $('#message').text(data.message);
+        }).fail(function() {
+            $('#message').text('Invalid credentials!');
         });
+    });
 
-        document.getElementById('transaction-btn').addEventListener('click', (e) => {
-            e.preventDefault();
-            if (!loggedInUser) {
-                document.getElementById('message').innerText =
-                 </script>
+    $('#transactionForm').on('submit', function(e) {
+        e.preventDefault();
+        const amount = $('#transactionAmount').val();
+        const transactionType = $('#transactionType').val();
+        $.post('/transaction', { amount, transaction_type: transactionType }, function(data) {
+            $('#message').text(data.message);
+        }).fail(function() {
+            $('#message').text('Login required!');
+        });
+    });
+
+    $('#logoutButton').on('click', function() {
+        $.post('/logout', function(data) {
+            $('#message').text(data.message);
+        });
+    });
+});
+               
+</script>
