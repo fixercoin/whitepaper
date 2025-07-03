@@ -1,45 +1,115 @@
- # Account Management
+ <html>
+  
+ <script>
+function displayResult()
+{
+var x=document.getElementById("myCheck").defaultChecked;
+alert(x);
+}
+</script>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Management</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Account Management System</h1>
-    </header>
-    <main>
-        <section id="signup-login">
-            <h2>Signup/Login with Gmail</h2>
-            <button onclick="loginWithGmail()">Login with Gmail</button>
-            <button onclick="signupWithGmail()">Signup with Gmail</button>
-        </section>
-        <section id="check-balance">
-            <h2>Check Balance</h2>
-            <button onclick="checkBalance()">Check Balance</button>
-            <p id="balance-display"></p>
-        </section>
-        <section id="buy-easypaisa">
-            <h2>Buy with Easypaisa</h2>
-            <input type="number" id="amount" placeholder="Enter amount">
-            <button onclick="buyWithEasypaisa()">Buy</button>
-        </section>
-        <section id="send-balance">
-            <h2>Send Balance</h2>
-            <input type="text" id="recipient" placeholder="Recipient's number">
-            <input type="number" id="send-amount" placeholder="Amount to send">
-            <button onclick="sendBalance()">Send Balance</button>
-        </section>
-        <section id="history">
-            <h2>Transaction History</h2>
-            <button onclick="viewHistory()">View History</button>
-            <ul id="history-list"></ul>
-        </section>
-    </main>
-    <script src="script.js"></script>
-</body>
-</html>
+<script>
+        $(function() {
+            var BV = new $.BigVideo();
+            BV.init();
+            BV.show('vids/red_small.mov',{ambient:true});
+        });
+    </script> 
+
+<div class="wrapper">
+<div class="profile-pic"></div>
+  <div class="box">
+    <div class="cover-pic"></div>
+    <div class="profile-name">
+      <b>MATT CHAN</b>
+    </div>
+    <div class="not-you">
+      not you?</div>
+   
+    
+  <div class="input-wrapper">
+    <input class="username-box" type="text" value="mchan@ecuad.ca">
+      
+    <input class="password-box" type="text" value="******">
+       <input class="checkbox" type="checkbox" checked="checked">I agree to the <a href="http://www.ecuad.ca">terms and conditions</a>
+    <input class="send" type="submit" value="CONNECT">
+  </div>
+        
+ </div>
+</div>
+ </html>
+
+<style>
+
+@import url(http://weloveiconfonts.com/api/?family=fontawesome);
+
+
+[class*="fontawesome-"]:before {
+  font-family: 'fontawesome', sans-serif;
+}
+
+html {
+  color: #222;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+  font-style, font-weight, letter-spacing, line-height, word-spacing: normal;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper {
+   position: fixed;
+  top: 50%;
+  left: 50%;
+  margin: -230px -160px;
+
+}
+
+.box{
+  position:relative;
+  margin: 160px auto;
+  width: 320px;
+  height: 360px;
+  background: #eee;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index:1;
+}
+
+
+</style>
+
+<script>
+			if (typeof(source) === 'string') {
+				var ext = source.substring(source.lastIndexOf('.')+1);
+				if (ext === 'jpg' || ext === 'gif' || ext === 'png') {
+					showPoster(source);
+				} else {
+					if (options.altSource && navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+						source = options.altSource;
+					}
+					playVideo(source);
+					isQueued = false;
+				}
+			} else {
+				playlist = source;
+				currMediaIndex = 0;
+				playVideo(playlist[currMediaIndex]);
+				isQueued = true;
+			}
+        };
+
+        // Expose Video.js player
+        BigVideo.getPlayer = function() {
+			return player;
+        };
+    };
+
+})(jQuery);
+
+</script>
