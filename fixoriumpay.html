@@ -51,15 +51,6 @@
         <h2>Phone Number Verification</h2>
         <form id="phone-form">
             <div class="input-group">
-                <label for="country-code">Country Code:</label>
-                <select id="country-code" name="country-code">
-                    <option value="+92">Pakistan (+92)</option>
-                    <option value="+1">USA (+1)</option>
-                    <option value="+44">UK (+44)</option>
-                    <!-- Add more country codes as needed -->
-                </select>
-            </div>
-            <div class="input-group">
                 <label for="phone-number">Phone Number:</label>
                 <input type="text" id="phone-number" name="phone-number" required>
             </div>
@@ -82,10 +73,9 @@
 
         document.getElementById('send-code-btn').addEventListener('click', (e) => {
             e.preventDefault();
-            const countryCode = document.getElementById('country-code').value;
             const phoneNumber = document.getElementById('phone-number').value;
             generatedCode = Math.floor(100000 + Math.random() * 900000);
-            console.log(`Verification code sent: ${generatedCode}`);
+            console.log(`Verification code sent to ${phoneNumber}: ${generatedCode}`);
             document.getElementById('phone-form').style.display = 'none';
             document.getElementById('code-form').style.display = 'block';
         });
