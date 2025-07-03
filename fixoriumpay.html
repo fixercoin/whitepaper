@@ -22,6 +22,7 @@
       publicKey: null,
       connect: async () => {
         try {
+          document.getElementById('output').innerText = 'Connecting to wallet...';
           const resp = await window.solana.connect();
           phantomWallet.publicKey = resp.publicKey;
           console.log('Wallet connected:', phantomWallet.publicKey.toString());
@@ -98,5 +99,4 @@
     // Add event listeners to buttons
     document.getElementById('connect-wallet-btn').addEventListener('click', phantomWallet.connect);
     document.getElementById('deposit-btn').addEventListener('click', () => depositFixercoin(10));
-    document.getElementById('withdraw-btn').addEventListener('click', () => withdrawFixercoin(5));
-    document.getElementById
+    document.getElementById('withdraw-btn').addEventListener('click', () => withdrawFixer
