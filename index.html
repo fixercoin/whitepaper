@@ -4,65 +4,115 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FixerCoin Wallet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .container {
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>FixerCoin Wallet</h1>
-        <button id="generate-wallet-btn">Generate Wallet</button>
-        <p>Wallet Address: <span id="wallet-address"></span></p>
-        <p>Balance: <span id="balance">0</span> FixerCoin</p>
-        <input type="text" id="deposit-amount" placeholder="Deposit Amount">
-        <button id="deposit-btn">Deposit</button>
-        <input type="text" id="withdraw-amount" placeholder="Withdraw Amount">
-        <button id="withdraw-btn">Withdraw</button>
-        <div id="transaction-history"></div>
+        <form id="login-form">
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button id="login-btn">Login</button>
+        </form>
+        <div id="wallet-container" style="display: none;">
+            <p>Wallet Address: <span id="wallet-address"></span></p>
+            <p>Balance: <span id="balance">0</span> FixerCoin</p>
+            <input type="text" id="deposit-amount" placeholder="Deposit Amount">
+            <button id="deposit-btn">Deposit</button>
+            <input type="text" id="withdraw-amount" placeholder="Withdraw Amount">
+            <button id="withdraw-btn">Withdraw</button>
+            <div id="transaction-history"></div>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-    <script>
-        let wallet = null;
-        let balance = 0;
-
-        document.getElementById('generate-wallet-btn').addEventListener('click', async () => {
-            wallet = ethers.Wallet.createRandom();
-            document.getElementById('wallet-address').innerText = wallet.address;
-        });
-
-        document.getElementById('deposit-btn').addEventListener('click', () => {
-            const amount = parseInt(document.getElementById('deposit-amount').value);
-            if (amount > 0) {
-                balance += amount;
-                document.getElementById('balance').innerText = balance;
-                document.getElementById('transaction-history').innerHTML += `<p>Deposited ${amount} FixerCoin</p>`;
-            }
-        });
-
-        document.getElementById('withdraw-btn').addEventListener('click', () => {
-            const amount = parseInt(document.getElementById('withdraw-amount').value);
-            if (amount > 0 && amount <= balance) {
-                balance -= amount;
-                document.getElementById('balance').innerText = balance;
-                document.getElementById('transaction-history').innerHTML += `<p>Withdrew ${amount} FixerCoin</p>`;
-            } else {
-                alert('Insufficient balance!');
-            }
-        });
-    </script>
+    <script src="https:                                                                     
+    <script src="script.js"></script>
 </body>
 </html>
+
+<style>
+ body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    background-color: #fff;
+    text-align: center;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#login-btn {
+    width: 100px;
+    height: 30px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}</style>
+<script>
+ let wallet = null;
+let balance = 10;
+let username = null;
+
+document.getElementById('login-btn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const usernameInput = document.getElementById('username').value;
+    const passwordInput = document.getElementById('password').value;
+    const response = await fetch('login.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: usernameInput, password: passwordInput }),
+    });
+    const data = await response.json();
+    if (data.success) {
+        username = usernameInput;
+        wallet = ethers.Wallet.createRandom();
+        document.getElementById('wallet-address').innerText = wallet.address;
+        document.getElementById('wallet-container').style.display = 'block';
+        document.getElementById('login-form').style.display = 'none';
+    } else {
+        alert('Invalid username or password!');
+    }
+});
+
+document.getElementById('deposit-btn').addEventListener('click', async () => {
+    const amount = parseInt(document.getElementById('deposit-amount').value);
+    if (amount > 0) {
+        balance += amount;
+        document.getElementById('balance').innerText = balance;
+        document.getElementById('transaction-history').innerHTML += `<p>Deposited ${amount} FixerCoin</p>`;
+        const response = await fetch('update_balance.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: username, balance: balance }),
+        });
+    }
+});
+
+document.getElementById('withdraw-btn').addEventListener('click', async () => {
+    const amount = parseInt(document.getElementById('withdraw-amount').value);
+    if (amount > 0 && amount <= balance) {
+        balance -= amount;
+        document.getElementById('balance').innerText = balance;
+        document.getElementById('transaction-history').innerHTML += `<p>Withdrew ${amount} FixerCoin</p>`;
+        const response = await fetch('update_balance.php
+</script>
+
+#wallet-container {
+    margin-top: 20px;
+ }
+ 
+</style>
