@@ -3,98 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIXERCOIN Balance</title>
+    <title>Admin Panel - FIXERCOIN</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .container {
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-            text-align: center;
-        }
-        .balance {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            margin-bottom: 20px;
-        }
-        button {
-            width: 100%;
-            height: 40px;
-            padding: 10px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-        button:hover {
-            background-color: #3e8e41;
-        }
+        body { font-family: Arial, sans-serif; }
+        .container { width: 80%; margin: auto; }
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
+        th { background-color: #f2f2f2; }
+        .form-group { margin: 20px 0; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 10px; }
+        button { padding: 10px 15px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Total FIXERCOIN Balance: <span id="balance">0.0</span> FIXERCOIN</h1>
-        <p>If you want to add FIXERCOIN, please contact 03017044833.</p>
-        <input type="text" id="recipient-id" placeholder="Recipient Gmail Address">
-        <input type="text" id="amount" placeholder="Amount">
-        <button id="send-btn">Send FIXERCOIN</button>
-        <h2>Transaction History:</h2>
-        <div id="transaction-history"></div>
-        <h2>Received FIXERCOIN:</h2>
-        <input type="text" id="received-amount" placeholder="Received Amount">
-        <button id="accept-btn">Accept Transaction</button>
+        <h1>FIXERCOIN Admin Panel</h1>
+        <div class="form-group">
+            <h2>Add FIXERCOIN Balance</h2>
+            <input type="text" id="userAccount" placeholder="User Account">
+            <input type="number" id="amountToAdd" placeholder="Amount to Add">
+            <button onclick="addBalance()">Add Balance</button>
+        </div>
+        <div class="form-group">
+            <h2>Send FIXERCOIN</h2>
+            <input type="text" id="recipientAccount" placeholder="Recipient Account">
+            <input type="number" id="amountToSend" placeholder="Amount to Send">
+            <button onclick="sendFixercoin()">Send FIXERCOIN</button>
+        </div>
+        <h2>Total FIXERCOIN Balance: <span id="totalBalance">0</span></h2>
+        <h2>Transaction History</h2>
+        <table id="transactionHistory">
+            <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Amount</th>
+                <th>User Account</th>
+            </tr>
+        </table>
     </div>
 
     <script>
-        let balance = 0.0;
-        document.getElementById('balance').innerText = balance;
+        let totalBalance = 0;
+        const transactionHistory = [];
 
-        const sendBtn = document.getElementById('send-btn');
-        sendBtn.addEventListener('click', () => {
-            const recipientId = document.getElementById('recipient-id').value;
-            const amount = parseFloat(document.getElementById('amount').value);
-            if (amount > balance) {
-                alert('Insufficient balance!');
-                return;
+        function addBalance() {
+            const userAccount = document.getElementById('userAccount').value;
+            const amountToAdd = parseFloat(document.getElementById('amountToAdd').value);
+            if (userAccount && amountToAdd > 0) {
+                totalBalance += amountToAdd;
+                transactionHistory.push({ date: new Date().toLocaleString(), action: 'Added Balance', amount: amountToAdd, account: userAccount });
+                updateUI();
             }
-            balance -= amount;
-            document.getElementById('balance').innerText = balance.toFixed(1);
-            const transactionHistory = document.getElementById('transaction-history');
-            const transaction = document.createElement('p');
-            transaction.innerText = `Sent ${amount} FIXERCOIN to ${recipientId}`;
-            transactionHistory.appendChild(transaction);
-            alert(`FIXERCOIN sent successfully! Recipient ID: ${recipientId}, Amount: ${amount}`);
-        });
+        }
 
-        const acceptBtn = document.getElementById('accept-btn');
-        acceptBtn.addEventListener('click', () => {
-            const receivedAmount = parseFloat(document.getElementById('received-amount').value);
-            balance += receivedAmount;
-            document.getElementById('balance').innerText = balance.toFixed(1);
-            const transactionHistory = document.getElementById('transaction-history');
-            const transaction = document.createElement('p');
-            transaction.innerText = `Received ${receivedAmount} FIXERCOIN`;
-            transactionHistory.appendChild(transaction);
-            alert(`Transaction accepted! Amount: ${receivedAmount}`);
-        });
+        function sendFixercoin() {
+            const recipientAccount = document.getElementById('recipientAccount').value;
+            const amountToSend = parseFloat(document.getElementById('amountToSend').value);
+            if (recipientAccount && amountToSend > 0 && amountToSend <= totalBalance) {
+                totalBalance -= amountToSend;
+                transactionHistory.push({ date: new Date().toLocaleString(), action: 'Sent FIXERCOIN', amount: amountToSend, account: recipientAccount });
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            document.getElementById('totalBalance').innerText = totalBalance;
+            const table = document.getElementById('transactionHistory');
+            table.innerHTML = '<tr><th>Date</th><th>Action</th><th>Amount</th><th>User Account</th></tr>';
+            transactionHistory.forEach(transaction => {
+                const row = table.insertRow();
+                row.insertCell(0).innerText = transaction.date;
+                row.insertCell(1).innerText = transaction.action;
+                row.insertCell(2).innerText = transaction.amount;
+                row.insertCell(3).innerText = transaction.account;
+            });
+        }
     </script>
 </body>
 </html>
