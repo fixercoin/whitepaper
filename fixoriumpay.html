@@ -4,96 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FixerCoin Wallet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        .container {
-            width: 300px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            background-color: #fff;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <div class="wallet-container">
         <h1>FixerCoin Wallet</h1>
         <button id="generate-wallet-btn">Generate Wallet</button>
         <p id="wallet-address"></p>
         <p id="private-key"></p>
-        <input type="text" id="login-private-key" placeholder="Private Key">
-        <button id="login-btn">Login</button>
-        <p id="balance"></p>
         <input type="text" id="recipient-address" placeholder="Recipient Address">
         <input type="text" id="amount" placeholder="Amount">
         <button id="send-btn">Send FixerCoin</button>
-        <p id="transaction-history"></p>
-        <button id="get-history-btn">Get Transaction History</button>
+        <p id="balance"></p>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.umd.min.js"></script>
-    <script>
-        let wallet = null;
-        let provider = ethers.getDefaultProvider();
-
-        document.getElementById('generate-wallet-btn').addEventListener('click', () => {
-            wallet = ethers.Wallet.createRandom();
-            document.getElementById('wallet-address').innerText = wallet.address;
-            document.getElementById('private-key').innerText = wallet.privateKey;
-        });
-
-        document.getElementById('login-btn').addEventListener('click', () => {
-            const privateKey = document.getElementById('login-private-key').value;
-            wallet = new ethers.Wallet(privateKey, provider);
-            document.getElementById('wallet-address').innerText = wallet.address;
-            getBalance();
-        });
-
-        document.getElementById('send-btn').addEventListener('click', async () => {
-            if (!wallet) {
-                alert('Please generate or login to a wallet first!');
-                return;
-            }
-            const recipientAddress = document.getElementById('recipient-address').value;
-            const amount = ethers.utils.parseEther(document.getElementById('amount').value);
-            const tx = {
-                to: recipientAddress,
-                value: amount
-            };
-            try {
-                const transaction = await wallet.sendTransaction(tx);
-                document.getElementById('transaction-history').innerText += `Sent ${document.getElementById('amount').value} ETH to ${recipientAddress}\n`;
-                getBalance();
-            } catch (error) {
-                console.error(error);
-            }
-        });
-
-        document.getElementById('get-history-btn').addEventListener('click', async () => {
-            if (!wallet) {
-                alert('Please generate or login to a wallet first!');
-                return;
-            }
-            const history = await provider.getTransactionCount(wallet.address);
-            document.getElementById('transaction-history').innerText = '';
-            for (let i = 0; i < history; i++) {
-                const txHash = await provider.getTransaction(wallet.address, i);
-                document.getElementById('transaction-history').innerText += `Transaction ${i}: ${txHash.hash}\n`;
-            }
-        });
-
-        async function getBalance() {
-            if (wallet) {
-                const balance = await provider.getBalance(wallet.address);
-                document.getElementById('balance').innerText = `Balance: ${ethers.utils.formatEther(balance)} ETH`;
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
