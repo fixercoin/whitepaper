@@ -1,7 +1,7 @@
  <!DOCTYPE html>
 <html>
 <head>
-    <title>FIXERCOIN WALLET</title>
+    <title>FixerCoin Wallet</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,13 +18,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>FIXERCOIN WALLET</h1>
+        <h1>FixerCoin Wallet</h1>
         <button id="connect-wallet-btn">Connect Phantom Wallet</button>
         <button id="deposit-btn" style="display: none;">Deposit</button>
         <button id="withdraw-btn" style="display: none;">Withdraw</button>
         <button id="swap-btn" style="display: none;">Swap</button>
         <p id="balance"></p>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/lib/index.iife.min.js"></script>
     <script>
         const connectWalletBtn = document.getElementById('connect-wallet-btn');
         const depositBtn = document.getElementById('deposit-btn');
@@ -60,16 +61,17 @@
         // Validate deposit transaction
         depositBtn.addEventListener('click', async () => {
             try {
-                const transaction = {
-                    from: ' sender public key',
-                    to: account,
-                    amount: 10,
-                };
-                // Note: transactionToBuffer function is not implemented
-                // const serializedTransaction = transactionToBuffer(transaction);
-                // const signature = await provider.signAndSendTransaction(serializedTransaction);
-                console.log('Deposit transaction created:', transaction);
-                // getBalance();
+                // Create a valid transaction object using the @solana/web3.js library
+                const transaction = new solanaWeb3.Transaction().add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: new solanaWeb3.PublicKey(' sender public key'),
+                        toPubkey: new solanaWeb3.PublicKey(account),
+                        lamports: 10 * solanaWeb3.LAMPORTS_PER_SOL,
+                    })
+                );
+                const signature = await provider.signAndSendTransaction(transaction);
+                console.log('Deposit successful:', signature);
+                getBalance();
             } catch (err) {
                 console.log('Error depositing:', err);
             }
@@ -78,16 +80,17 @@
         // Validate withdraw transaction
         withdrawBtn.addEventListener('click', async () => {
             try {
-                const transaction = {
-                    from: account,
-                    to: ' recipient public key',
-                    amount: 10,
-                };
-                // Note: transactionToBuffer function is not implemented
-                // const serializedTransaction = transactionToBuffer(transaction);
-                // const signature = await provider.signAndSendTransaction(serializedTransaction);
-                console.log('Withdraw transaction created:', transaction);
-                // getBalance();
+                // Create a valid transaction object using the @solana/web3.js library
+                const transaction = new solanaWeb3.Transaction().add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: new solanaWeb3.PublicKey(account),
+                        toPubkey: new solanaWeb3.PublicKey(' recipient public key'),
+                        lamports: 10 * solanaWeb3.LAMPORTS_PER_SOL,
+                    })
+                );
+                const signature = await provider.signAndSendTransaction(transaction);
+                console.log('Withdrawal successful:', signature);
+                getBalance();
             } catch (err) {
                 console.log('Error withdrawing:', err);
             }
@@ -100,34 +103,4 @@
                 const fromMint = 'FROM_MINT_PUBLIC_KEY';
                 const toMint = 'TO_MINT_PUBLIC_KEY';
                 const amount = 10;
-                const slippage = 0.1;
-
-                // Get swap quote
-                // Note: API endpoint might not work, use a valid API endpoint
-                const quoteResponse = await fetch(`https:                                                                                                               
-                const quoteData = await quoteResponse.json();
-                console.log('Swap quote:', quoteData);
-            } catch (err) {
-                console.log('Error swapping:', err);
-            }
-        });
-
-                                  
-        async function getBalance() {
-            try {
-                const response = await fetch('https:                           
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        jsonrpc: '2.0',
-                        id: 1,
-                        method: 'getBalance',
-                        params: [account],
-                    }),
-                });
-                const data = await response.json();
-                balance = data.result.value / 1e9;
-                balanceElement.innerText = `Balance: ${balance} SOL`;
-            } catch (
+                const slippage
