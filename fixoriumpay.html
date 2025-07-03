@@ -1,7 +1,7 @@
  <!DOCTYPE html>
 <html>
 <head>
-    <title>FixerCoin Wallet</title>
+    <title>FIXERCOIN WALLET</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>FixerCoin Wallet</h1>
+        <h1>FIXERCOIN WALLET</h1>
         <button id="connect-wallet-btn">Connect Phantom Wallet</button>
         <button id="deposit-btn" style="display: none;">Deposit</button>
         <button id="withdraw-btn" style="display: none;">Withdraw</button>
@@ -41,10 +41,7 @@
             if (window.phantom?.solana) {
                 provider = window.phantom.solana;
                 try {
-                    const resp = await provider.connect({ onlyIfTrusted: true });
-                    if (!resp) {
-                        throw new Error('User did not trust this site');
-                    }
+                    const resp = await provider.connect();
                     account = resp.publicKey.toString();
                     console.log('Connected to Phantom wallet:', account);
                     connectWalletBtn.style.display = 'none';
@@ -54,11 +51,9 @@
                     getBalance();
                 } catch (err) {
                     console.log('Error connecting to Phantom wallet:', err);
-                    // Handle connection error
                 }
             } else {
                 console.log('Phantom wallet not found');
-                // Handle Phantom wallet not found
             }
         });
 
@@ -70,13 +65,13 @@
                     to: account,
                     amount: 10,
                 };
-                const serializedTransaction = transactionToBuffer(transaction);
-                const signature = await provider.signAndSendTransaction(serializedTransaction);
-                console.log('Deposit successful:', signature);
-                getBalance();
+                // Note: transactionToBuffer function is not implemented
+                // const serializedTransaction = transactionToBuffer(transaction);
+                // const signature = await provider.signAndSendTransaction(serializedTransaction);
+                console.log('Deposit transaction created:', transaction);
+                // getBalance();
             } catch (err) {
                 console.log('Error depositing:', err);
-                // Handle deposit error
             }
         });
 
@@ -88,13 +83,13 @@
                     to: ' recipient public key',
                     amount: 10,
                 };
-                const serializedTransaction = transactionToBuffer(transaction);
-                const signature = await provider.signAndSendTransaction(serializedTransaction);
-                console.log('Withdrawal successful:', signature);
-                getBalance();
+                // Note: transactionToBuffer function is not implemented
+                // const serializedTransaction = transactionToBuffer(transaction);
+                // const signature = await provider.signAndSendTransaction(serializedTransaction);
+                console.log('Withdraw transaction created:', transaction);
+                // getBalance();
             } catch (err) {
                 console.log('Error withdrawing:', err);
-                // Handle withdraw error
             }
         });
 
@@ -108,24 +103,16 @@
                 const slippage = 0.1;
 
                 // Get swap quote
-                const quoteResponse = await fetch(`https://api.dex aggregator.com/v1/quote?fromMint=${fromMint}&toMint=${toMint}&amount=${amount}&slippage=${slippage}`);
+                // Note: API endpoint might not work, use a valid API endpoint
+                const quoteResponse = await fetch(`https:                                                                                                               
                 const quoteData = await quoteResponse.json();
-
-                // Create swap transaction
-                const swapTransaction = quoteData.data.transaction;
-                const serializedSwapTransaction = transactionToBuffer(swapTransaction);
-
-                // Sign and send swap transaction
-                const signature = await provider.signAndSendTransaction(serializedSwapTransaction);
-                console.log('Swap successful:', signature);
-                getBalance();
+                console.log('Swap quote:', quoteData);
             } catch (err) {
                 console.log('Error swapping:', err);
-                // Handle swap error
             }
         });
 
-        // Function to get balance
+                                  
         async function getBalance() {
             try {
                 const response = await fetch('https:                           
@@ -134,5 +121,13 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        jsonrpc: '2.0
- 
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'getBalance',
+                        params: [account],
+                    }),
+                });
+                const data = await response.json();
+                balance = data.result.value / 1e9;
+                balanceElement.innerText = `Balance: ${balance} SOL`;
+            } catch (
