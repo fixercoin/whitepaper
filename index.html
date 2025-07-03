@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidra Wallet</title>
+    <title>FIXERCOIN</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,55 +19,68 @@
             background-color: #fff;
             text-align: center;
         }
-        .balance {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Sidra Wallet</h1>
-        <p>Balance: <span id="balance">0.0</span> SIDRA</p>
-        <button id="receive-btn">Receive SIDRA</button>
-        <button id="send-btn">Send SIDRA</button>
+        <h1>FIXERCOIN</h1>
+        <p>Balance: <span id="balance">0</span> FIXERCOIN</p>
+        <button id="buy-btn">Buy FIXERCOIN</button>
+        <input type="text" id="recipient-id" placeholder="Recipient ID">
+        <input type="text" id="amount" placeholder="Amount">
+        <button id="send-btn">Send FIXERCOIN</button>
         <div id="transaction-history"></div>
     </div>
 
     <script>
-        let balance = 0.0;
-        document.getElementById('balance').innerText = balance;
+        let users = JSON.parse(localStorage.getItem('users')) || {};
+        let currentUser = null;
 
-        const receiveBtn = document.getElementById('receive-btn');
-        receiveBtn.addEventListener('click', () => {
-            const receivedAmount = prompt('Enter received amount:');
-            if (receivedAmount) {
-                balance += parseFloat(receivedAmount);
-                document.getElementById('balance').innerText = balance.toFixed(1);
-                const transactionHistory = document.getElementById('transaction-history');
-                const transaction = document.createElement('p');
-                transaction.innerText = `Received ${receivedAmount} SIDRA`;
-                transactionHistory.appendChild(transaction);
+        function login(id) {
+            if (!users[id]) {
+                users[id] = { balance: 0, history: [] };
             }
+            currentUser = users[id];
+            localStorage.setItem('users', JSON.stringify(users));
+            updateBalance();
+            updateHistory();
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').innerText = currentUser.balance;
+        }
+
+        function updateHistory() {
+            const history = document.getElementById('transaction-history');
+            history.innerHTML = '';
+            currentUser.history.forEach(transaction => {
+                const p = document.createElement('p');
+                p.innerText = transaction;
+                history.appendChild(p);
+            });
+        }
+
+        login('default');
+
+        document.getElementById('buy-btn').addEventListener('click', () => {
+            alert('Buy FIXERCOIN using Easypaisa or contact admin at t.me/fixorium');
         });
 
-        const sendBtn = document.getElementById('send-btn');
-        sendBtn.addEventListener('click', () => {
-            const recipientAddress = prompt('Enter recipient address:');
-            const amount = prompt('Enter amount to send:');
-            if (recipientAddress && amount) {
-                if (parseFloat(amount) > balance) {
-                    alert('Insufficient balance!');
-                    return;
-                }
-                balance -= parseFloat(amount);
-                document.getElementById('balance').innerText = balance.toFixed(1);
-                const transactionHistory = document.getElementById('transaction-history');
-                const transaction = document.createElement('p');
-                transaction.innerText = `Sent ${amount} SIDRA to ${recipientAddress}`;
-                transactionHistory.appendChild(transaction);
+        document.getElementById('send-btn').addEventListener('click', () => {
+            const recipientId = document.getElementById('recipient-id').value;
+            const amount = parseInt(document.getElementById('amount').value);
+            if (amount > currentUser.balance) {
+                alert('Insufficient balance!');
+                return;
             }
+            currentUser.balance -= amount;
+            users[recipientId] = users[recipientId] || { balance: 0, history: [] };
+            users[recipientId].balance += amount;
+            currentUser.history.push(`Sent ${amount} FIXERCOIN to ${recipientId}`);
+            users[recipientId].history.push(`Received ${amount} FIXERCOIN from ${Object.keys(users).find(key => users[key] === currentUser)}`);
+            localStorage.setItem('users', JSON.stringify(users));
+            updateBalance();
+            updateHistory();
         });
     </script>
 </body>
