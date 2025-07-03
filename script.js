@@ -1,73 +1,54 @@
- // Function to login with Gmail
-function loginWithGmail() {
-  // Add login with Gmail functionality here
-  console.log('Login with Gmail clicked');
-  // You can use Google Sign-In API to implement login with Gmail
-  // For example:
-  // window.location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email';
-}
+ // script.js
+const createAccountForm = document.getElementById('create-account-form');
+const depositForm = document.getElementById('deposit-form');
+const transferForm = document.getElementById('transfer-form');
+const checkBalanceBtn = document.getElementById('check-balance-btn');
 
-// Function to signup with Gmail
-function signupWithGmail() {
-  // Add signup with Gmail functionality here
-  console.log('Signup with Gmail clicked');
-  // You can use Google Sign-In API to implement signup with Gmail
-  // For example:
-  // window.location.href = 'https://accounts.google.com/o/oauth2/auth?client_id=YOUR_CLIENT_ID&redirect_uri=YOUR_REDIRECT_URI&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email';
-}
+createAccountForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const username = document.getElementById('username').value;
+  fetch('/create-account', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username }),
+  })
+    .then((res) => res.json())
+    .then((data) => console.log(data))
+    .catch((err) => console.error(err));
+});
 
-// Function to check balance
-function checkBalance() {
-  // Add check balance functionality here
-  console.log('Check Balance clicked');
-  // For example:
-  const balance = 1000; // Replace with actual balance
-  document.getElementById('balance-display').innerText = `Your balance is: ${balance}`;
-}
-
-// Function to buy with Easypaisa
-function buyWithEasypaisa() {
-  // Add buy with Easypaisa functionality here
-  console.log('Buy with Easypaisa clicked');
+depositForm.addEventListener('submit', (e) => {
+  e.preventDefault();
   const amount = document.getElementById('amount').value;
-  // For example:
-  if (amount > 0) {
-    console.log(`Buying ${amount} with Easypaisa...`);
-    // Implement Easypaisa payment gateway API here
-  } else {
-    alert('Invalid amount');
-  }
-}
+  fetch('/deposit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ amount }),
+  })
+    .then((res) => res.json())
+    .then((data) => console.log(data))
+    .catch((err) => console.error(err));
+});
 
-// Function to send balance
-function sendBalance() {
-  // Add send balance functionality here
-  console.log('Send Balance clicked');
-  const recipient = document.getElementById('recipient').value;
-  const sendAmount = document.getElementById('send-amount').value;
-  // For example:
-  if (recipient && sendAmount > 0) {
-    console.log(`Sending ${sendAmount} to ${recipient}...`);
-    // Implement send balance functionality here
-  } else {
-    alert('Invalid recipient or amount');
-  }
-}
+transferForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const receiverId = document.getElementById('receiver-id').value;
+  const amount = document.getElementById('transfer-amount').value;
+  fetch('/transfer', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ receiverId, amount }),
+  })
+    .then((res) => res.json())
+    .then((data) => console.log(data))
+    .catch((err) => console.error(err));
+});
 
-// Function to view transaction history
-function viewHistory() {
-  // Add view transaction history functionality here
-  console.log('View History clicked');
-  // For example:
-  const history = [
-    { date: '2022-01-01', amount: 100 },
-    { date: '2022-01-02', amount: 200 },
-  ];
-  const historyList = document.getElementById('history-list');
-  historyList.innerHTML = '';
-  history.forEach(item => {
-    const listItem = document.createElement('li');
-    listItem.innerText = `${item.date}: ${item.amount}`;
-    historyList.appendChild(listItem);
-  });
-   }
+checkBalanceBtn.addEventListener('click', () => {
+  fetch('/balance')
+    .then((res) => res.json())
+    .then((data) => {
+      document.getElementById('balance').innerText = `Balance: ${data.balance}`;
+    })
+    .catch((err) => console.error(err));
+});
