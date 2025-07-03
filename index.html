@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIXERCOIN</title>
+    <title>Crypto Wallet</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -23,64 +23,54 @@
 </head>
 <body>
     <div class="container">
-        <h1>FIXERCOIN</h1>
-        <p>Balance: <span id="balance">500</span> FIXERCOIN</p>
-        <button id="buy-btn">Buy FIXERCOIN</button>
-        <input type="text" id="recipient-id" placeholder="Recipient ID">
+        <h1>Crypto Wallet</h1>
+        <p>Your Address: <span id="your-address"></span></p>
+        <p>Balance: <span id="balance">0</span> Tokens</p>
+        <input type="text" id="recipient-address" placeholder="Recipient Address">
         <input type="text" id="amount" placeholder="Amount">
-        <button id="send-btn">Send FIXERCOIN</button>
+        <button id="send-btn">Send Tokens</button>
+        <button id="generate-address-btn">Generate Address</button>
         <div id="transaction-history"></div>
     </div>
 
     <script>
-        let users = JSON.parse(localStorage.getItem('users')) || {};
+        let wallets = {};
         let currentUser = null;
 
-        function login(id) {
-            if (!users[id]) {
-                users[id] = { balance: 500, history: [] };
-            }
-            currentUser = users[id];
-            localStorage.setItem('users', JSON.stringify(users));
-            updateBalance();
-            updateHistory();
+        function generateAddress() {
+            const address = Math.random().toString(36).substr(2, 10);
+            wallets[address] = { balance: 100, history: [] };
+            return address;
         }
 
-        function updateBalance() {
-            document.getElementById('balance').innerText = currentUser.balance;
-        }
-
-        function updateHistory() {
-            const history = document.getElementById('transaction-history');
-            history.innerHTML = '';
-            currentUser.history.forEach(transaction => {
-                const p = document.createElement('p');
-                p.innerText = transaction;
-                history.appendChild(p);
-            });
-        }
-
-        login('default');
-
-        document.getElementById('buy-btn').addEventListener('click', () => {
-            alert('Buy FIXERCOIN using Easypaisa or contact admin at t.me/fixorium');
+        document.getElementById('generate-address-btn').addEventListener('click', () => {
+            currentUser = generateAddress();
+            document.getElementById('your-address').innerText = currentUser;
+            document.getElementById('balance').innerText = wallets[currentUser].balance;
         });
 
         document.getElementById('send-btn').addEventListener('click', () => {
-            const recipientId = document.getElementById('recipient-id').value;
+            if (!currentUser) {
+                alert('Please generate an address first!');
+                return;
+            }
+            const recipientAddress = document.getElementById('recipient-address').value;
             const amount = parseInt(document.getElementById('amount').value);
-            if (amount > currentUser.balance) {
+            if (!wallets[recipientAddress]) {
+                alert('Recipient address not found!');
+                return;
+            }
+            if (amount > wallets[currentUser].balance) {
                 alert('Insufficient balance!');
                 return;
             }
-            currentUser.balance -= amount;
-            users[recipientId] = users[recipientId] || { balance: 0, history: [] };
-            users[recipientId].balance += amount;
-            currentUser.history.push(`Sent ${amount} FIXERCOIN to ${recipientId}`);
-            users[recipientId].history.push(`Received ${amount} FIXERCOIN from ${Object.keys(users).find(key => users[key] === currentUser)}`);
-            localStorage.setItem('users', JSON.stringify(users));
-            updateBalance();
-            updateHistory();
+            wallets[currentUser].balance -= amount;
+            wallets[recipientAddress].balance += amount;
+            wallets[currentUser].history.push(`Sent ${amount} tokens to ${recipientAddress}`);
+            wallets[recipientAddress].history.push(`Received ${amount} tokens from ${currentUser}`);
+            document.getElementById('balance').innerText = wallets[currentUser].balance;
+            document.getElementById('transaction-history').innerHTML += `<p>Sent ${amount} tokens to ${recipientAddress}</p>`;
+            alert(`Tokens sent successfully! Recipient Address: ${recipientAddress}, Amount: ${amount}`);
         });
     </script>
 </body>
