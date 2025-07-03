@@ -51,19 +51,18 @@
 </head>
 <body>
     <div class="container">
-        <h1>Total Balance: 500 FIXERCOIN</h1>
-        <p>Received as SIGNUP reward</p>
+        <h1>Balance: <span id="balance">500</span> FIXERCOIN</h1>
         <input type="text" id="recipient-id" placeholder="Recipient ID">
         <input type="text" id="amount" placeholder="Amount">
         <button id="send-btn">Send FIXERCOIN</button>
-        <p id="balance-after-send"></p>
-        <h2>FIXERCOIN HISTORY DETAIL</h2>
-        <ul id="transaction-history">
-        </ul>
+        <h2>Transaction History:</h2>
+        <div id="transaction-history"></div>
     </div>
 
     <script>
         let balance = 500;
+        document.getElementById('balance').innerText = balance;
+
         setTimeout(() => {
             window.location.href = 'https:                                                                                             
         }, 60000);            
@@ -77,9 +76,9 @@
                 return;
             }
             balance -= amount;
-            document.getElementById('balance-after-send').innerText = `Balance after send: ${balance} FIXERCOIN`;
+            document.getElementById('balance').innerText = balance;
             const transactionHistory = document.getElementById('transaction-history');
-            const transaction = document.createElement('li');
+            const transaction = document.createElement('p');
             transaction.innerText = `Sent ${amount} FIXERCOIN to ${recipientId}`;
             transactionHistory.appendChild(transaction);
             alert(`FIXERCOIN sent successfully! Recipient ID: ${recipientId}, Amount: ${amount}`);
