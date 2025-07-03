@@ -1,0 +1,93 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>Solana Wallet App</title>
+</head>
+<body>
+  <h1>Solana Wallet App</h1>
+  <button id="connect-wallet-btn">Connect Wallet</button>
+  <button id="deposit-btn">Deposit FIXERCOIN</button>
+  <button id="withdraw-btn">Withdraw FIXERCOIN</button>
+  <button id="swap-btn">Swap Tokens</button>
+  <button id="get-transaction-btn">Get Transaction Details</button>
+  <div id="output"></div>
+
+  <script>
+    // Import necessary libraries
+    const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+
+    // Create Phantom wallet adapter
+    const phantomWallet = {
+      publicKey: null,
+      connect: async () => {
+        try {
+          const resp = await window.solana.connect();
+          phantomWallet.publicKey = resp.publicKey;
+          console.log('Wallet connected:', phantomWallet.publicKey.toString());
+          document.getElementById('output').innerText = 'Wallet connected: ' + phantomWallet.publicKey.toString();
+        } catch (err) {
+          console.log('Error connecting to wallet:', err);
+          document.getElementById('output').innerText = 'Error connecting to wallet: ' + err;
+        }
+      }
+    };
+
+    // Function to deposit FIXERCOIN
+    async function depositFixercoin(amount) {
+      try {
+        console.log(`Depositing ${amount} FIXERCOIN...`);
+        document.getElementById('output').innerText = `Depositing ${amount} FIXERCOIN...`;
+      } catch (err) {
+        console.log('Error depositing FIXERCOIN:', err);
+        document.getElementById('output').innerText = 'Error depositing FIXERCOIN: ' + err;
+      }
+    }
+
+    // Function to withdraw FIXERCOIN
+    async function withdrawFixercoin(amount) {
+      try {
+        console.log(`Withdrawing ${amount} FIXERCOIN...`);
+        document.getElementById('output').innerText = `Withdrawing ${amount} FIXERCOIN...`;
+      } catch (err) {
+        console.log('Error withdrawing FIXERCOIN:', err);
+        document.getElementById('output').innerText = 'Error withdrawing FIXERCOIN: ' + err;
+      }
+    }
+
+    // Function to swap tokens
+    async function swapTokens(fromToken, toToken, amount) {
+      try {
+        console.log(`Swapping ${amount} ${fromToken} to ${toToken}...`);
+        document.getElementById('output').innerText = `Swapping ${amount} ${fromToken} to ${toToken}...`;
+      } catch (err) {
+        console.log('Error swapping tokens:', err);
+        document.getElementById('output').innerText = 'Error swapping tokens: ' + err;
+      }
+    }
+
+    // Function to get transaction details
+    async function getTransactionDetails(transactionId) {
+      try {
+        const transaction = await connection.getTransaction(transactionId);
+        console.log('Transaction details:', transaction);
+        document.getElementById('output').innerText = 'Transaction details: ' + JSON.stringify(transaction);
+      } catch (err) {
+        console.log('Error getting transaction details:', err);
+        document.getElementById('output').innerText = 'Error getting transaction details: ' + err;
+      }
+    }
+
+    // Add event listeners to buttons
+    document.getElementById('connect-wallet-btn').addEventListener('click', phantomWallet.connect);
+    document.getElementById('deposit-btn').addEventListener('click', () => depositFixercoin(10));
+    document.getElementById('withdraw-btn').addEventListener('click', () => withdrawFixercoin(5));
+    document.getElementById('swap-btn').addEventListener('click', () => swapTokens('FIXERCOIN', 'SOL', 2));
+    document.getElementById('get-transaction-btn').addEventListener('click', () => getTransactionDetails('your-transaction-id-here'));
+
+    // Load Solana Web3 library
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js';
+    document.head.appendChild(script);
+  </script>
+</body>
+</html>
