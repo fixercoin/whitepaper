@@ -21,73 +21,57 @@
 <body>
     <div class="container">
         <h2>Registration Form</h2>
-        <form id="register-form" method="post">
+        <form id="register-form">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
-            <button id="register-btn" name="register">Register</button>
+            <button id="register-btn">Register</button>
         </form>
         <form id="otp-form" style="display: none;">
             <label for="otp">Enter OTP:</label>
             <input type="number" id="otp" name="otp" required>
-            <button id="verify-btn" name="verify">Verify</button>
+            <button id="verify-btn">Verify</button>
         </form>
-        <?php
-            // Database connection settings
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "mydatabase";
-
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // Check connection
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            // Check if form is submitted
-            if (isset($_POST['register'])) {
-                $email = $_POST['email'];
-                $otp = rand(100000, 999999);
-
-                // Send OTP to Gmail address
-                $to = $email;
-                $subject = "OTP Verification";
-                $message = "Your OTP is: $otp";
-                $headers = "From: your-email@gmail.com";
-                mail($to, $subject, $message, $headers);
-
-                // Store OTP in session
-                session_start();
-                $_SESSION['otp'] = $otp;
-                $_SESSION['email'] = $email;
-
-                echo "<script>document.getElementById('register-form').style.display = 'none'; document.getElementById('otp-form').style.display = 'block';</script>";
-            }
-
-            // Verify OTP
-            if (isset($_POST['verify'])) {
-                session_start();
-                $otp = $_SESSION['otp'];
-                $email = $_SESSION['email'];
-                $user_otp = $_POST['otp'];
-
-                if ($otp == $user_otp) {
-                    // Insert data into database
-                    $sql = "INSERT INTO users (email) VALUES ('$email')";
-                    if ($conn->query($sql) === TRUE) {
-                        // Redirect to login page
-                        header('Location: login.html');
-                        exit;
-                    } else {
-                        echo "Error: " . $sql . "<br>" . $conn->error;
-                    }
-                } else {
-                    echo "Invalid OTP";
-                }
-            }
-        ?>
     </div>
+
+    <script>
+        const registerForm = document.getElementById('register-form');
+        const otpForm = document.getElementById('otp-form');
+        const registerBtn = document.getElementById('register-btn');
+        const verifyBtn = document.getElementById('verify-btn');
+
+        registerBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            // Send OTP to Gmail address using backend service
+            // For demonstration purposes, we'll generate a random OTP
+            const otp = Math.floor(100000 + Math.random() * 900000);
+            console.log(`OTP sent to ${email}: ${otp}`);
+
+            // Store OTP in local storage for verification
+            localStorage.setItem('otp', otp);
+            localStorage.setItem('email', email);
+
+            registerForm.style.display = 'none';
+            otpForm.style.display = 'block';
+        });
+
+        verifyBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const otp = document.getElementById('otp').value;
+            const storedOtp = localStorage.getItem('otp');
+            const email = localStorage.getItem('email');
+
+            if (otp == storedOtp) {
+                // Store user data in backend database
+                // For demonstration purposes, we'll log the data
+                console.log(`User registered with email: ${email}`);
+
+                // Redirect to login page
+                window.location.href = 'login.html';
+            } else {
+                console.log('Invalid OTP');
+            }
+        });
+    </script>
 </body>
 </html>
