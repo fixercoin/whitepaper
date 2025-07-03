@@ -24,7 +24,7 @@
 <body>
     <div class="container">
         <h1>FIXERCOIN</h1>
-        <p>Balance: <span id="balance">0</span> FIXERCOIN</p>
+        <p>Balance: <span id="balance">500</span> FIXERCOIN</p>
         <button id="buy-btn">Buy FIXERCOIN</button>
         <input type="text" id="recipient-id" placeholder="Recipient ID">
         <input type="text" id="amount" placeholder="Amount">
@@ -38,7 +38,7 @@
 
         function login(id) {
             if (!users[id]) {
-                users[id] = { balance: 0, history: [] };
+                users[id] = { balance: 500, history: [] };
             }
             currentUser = users[id];
             localStorage.setItem('users', JSON.stringify(users));
