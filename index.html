@@ -52,40 +52,24 @@
 <body>
     <div class="container">
         <h1>Welcome</h1>
-        <div id="login-check"></div>
-        <div id="balance-div" style="display: none;">
-            <p class="balance">Balance: 50 FIXERCOIN</p>
-            <input type="text" id="recipient-id" placeholder="Recipient ID">
-            <input type="text" id="amount" placeholder="Amount">
-            <button id="send-btn">Send FIXERCOIN</button>
-            <h2>Contract for adding FIXERCOIN</h2>
-            <p>Contract Address: 0x1234567890abcdef</p>
-            <h2>HISTORY DETAIL</h2>
-            <p>Transaction History:</p>
-            <ul id="transaction-history">
-                <li>Transaction 1: Sent 10 FIXERCOIN to 0x1234567890abcdef</li>
-                <li>Transaction 2: Received 20 FIXERCOIN from 0x9876543210fedcba</li>
-            </ul>
-        </div>
+        <p class="balance">Balance: 50 FIXERCOIN</p>
+        <input type="text" id="recipient-id" placeholder="Recipient ID">
+        <input type="text" id="amount" placeholder="Amount">
+        <button id="send-btn">Send FIXERCOIN</button>
+        <h2>Contract for adding FIXERCOIN</h2>
+        <p>Contract Address: 0x1234567890abcdef</p>
+        <h2>HISTORY DETAIL</h2>
+        <p>Transaction History:</p>
+        <ul id="transaction-history">
+            <li>Transaction 1: Sent 10 FIXERCOIN to 0x1234567890abcdef</li>
+            <li>Transaction 2: Received 20 FIXERCOIN from 0x9876543210fedcba</li>
+        </ul>
     </div>
 
     <script>
-        const loginCheckDiv = document.getElementById('login-check');
-        const balanceDiv = document.getElementById('balance-div');
-        const loggedIn = localStorage.getItem('loggedIn');
-
-        if (loggedIn === 'true') {
-            balanceDiv.style.display = 'block';
-            setTimeout(() => {
-                localStorage.setItem('loggedIn', 'false');
-                window.location.href = 'https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/fixoriumpay.html';
-            }, 60000); // 1 minute
-        } else {
-            loginCheckDiv.innerHTML = 'Please login to access this page.';
-            setTimeout(() => {
-                window.location.href = 'https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/login.html';
-            }, 2000);
-        }
+        setTimeout(() => {
+            window.location.href = 'https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/fixoriumpay.html';
+        }, 60000); // 1 minute
 
         const sendBtn = document.getElementById('send-btn');
         sendBtn.addEventListener('click', () => {
