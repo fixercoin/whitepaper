@@ -1,1 +1,98 @@
-hhhh
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balance</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 300px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #fff;
+            text-align: center;
+        }
+        .balance-image {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+        .send-token {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        button {
+            width: 100%;
+            height: 40px;
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #3e8e41;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Balance</h1>
+        <div id="login-check"></div>
+        <div id="balance-div" style="display: none;">
+            <img class="balance-image" src="https:                                               
+            <div class="send-token">
+                <input type="text" id="token-amount" placeholder="Token Amount">
+                <input type="text" id="recipient-id" placeholder="Recipient ID">
+                <button id="send-token-btn">Send Token</button>
+            </div>
+            <button onclick="window.location.href='https:                                                             
+        </div>
+    </div>
+
+    <script>
+        const loginCheckDiv = document.getElementById('login-check');
+        const balanceDiv = document.getElementById('balance-div');
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+
+        if (token) {
+                                                          
+            balanceDiv.style.display = 'block';
+        } else {
+                                     
+            loginCheckDiv.innerHTML = 'Please login to access this page.';
+            setTimeout(() => {
+                window.location.href = 'https://htmlpreview.github.io/?https://github.com/fixercoin/whitepaper/blob/main/login.html';
+            }, 2000);
+        }
+
+        const sendTokenBtn = document.getElementById('send-token-btn');
+        sendTokenBtn.addEventListener('click', () => {
+            const tokenAmount = document.getElementById('token-amount').value;
+            const recipientId = document.getElementById('recipient-id').value;
+            // Add logic to send token to recipient
+            alert(`Token sent successfully! Token Amount: ${tokenAmount}, Recipient ID: ${recipientId}`);
+        });
+    </script>
+</body>
+</html>
+
