@@ -11,6 +11,7 @@
   <button id="withdraw-btn">Withdraw FIXERCOIN</button>
   <button id="swap-btn">Swap Tokens</button>
   <button id="get-transaction-btn">Get Transaction Details</button>
+  <input id="transaction-id" type="text" placeholder="Enter transaction ID">
   <div id="output"></div>
   <div id="timer"></div>
   <script>
@@ -86,17 +87,4 @@
     let timer = 0;
     function startTimer() {
       timer++;
-      document.getElementById('timer').innerText = 'Trying to connect... ' + timer + ' seconds';
-      if (timer < 60) {
-        setTimeout(() => {
-          startTimer();
-        }, 1000);
-      } else {
-        document.getElementById('timer').innerText = 'Connection timed out';
-      }
-    }
-
-    // Add event listeners to buttons
-    document.getElementById('connect-wallet-btn').addEventListener('click', phantomWallet.connect);
-    document.getElementById('deposit-btn').addEventListener('click', () => depositFixercoin(10));
-    document.getElementById('withdraw-btn').addEventListener('click', () => withdrawFixer
+      document.getElementById('timer').innerText
